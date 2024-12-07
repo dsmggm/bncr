@@ -2,7 +2,7 @@
  * @author Dsmggm
  * @name Dsmggm_赞赏
  * @team Dsmggm
- * @version 1.0.3
+ * @version 1.0.5
  * @description 请求赞赏，返回赞赏
  * @rule ^(赞赏)$
  * @rule ^(赞赏码)$
@@ -40,19 +40,19 @@ const logMessage = (level, message) => {
   // 根据 level 选择合适的 console 方法
   switch (level) {
     case 'ERROR':
-      console.error(`[${timestamp}] [${level}] Dsmggm_监测赞赏码信息 - ${message}`);
+      console.error(`[${timestamp}] [${level}] Dsmggm_赞赏信息 - ${message}`);
       break;
     case 'WARN':
-      console.warn(`[${timestamp}] [${level}] Dsmggm_监测赞赏码信息 - ${message}`);
+      console.warn(`[${timestamp}] [${level}] Dsmggm_赞赏信息 - ${message}`);
       break;
     case 'INFO':
-      console.info(`[${timestamp}] [${level}] Dsmggm_监测赞赏码信息 - ${message}`);
+      console.info(`[${timestamp}] [${level}] Dsmggm_赞赏信息 - ${message}`);
       break;
     case 'DEBUG':
-      console.debug(`[${timestamp}] [${level}] Dsmggm_监测赞赏码信息 - ${message}`);
+      console.debug(`[${timestamp}] [${level}] Dsmggm_赞赏信息 - ${message}`);
       break;
     default:
-      console.log(`[${timestamp}] [${level}] Dsmggm_监测赞赏码信息 - ${message}`);
+      console.log(`[${timestamp}] [${level}] Dsmggm_赞赏信息 - ${message}`);
       break;
   }
 };
@@ -195,7 +195,7 @@ module.exports = async (s) => {
     await s.reply('请在2分钟内完成赞赏');
 
     // 过2秒发提示
-    // await sysMethod.sleep(4);
+    await sysMethod.sleep(4);
     await s.reply('完成赞赏后回复："y"或"1"\n退出回复："q"');
 
     // 回复赞赏
@@ -224,7 +224,7 @@ module.exports = async (s) => {
       } else {
           await s.reply('输入错误\n完成打赏回复："y"或"1" \n退出回复："q"');
       }
-  }
+    }
       
 
     // 检查是否已经付款
