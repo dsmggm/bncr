@@ -76,7 +76,7 @@ const ConfigDB = new BncrPluginConfig(jsonSchema);
 async function check_money(s) {
     const userdb = new BncrDB('Reward_data');
     const allkeys = await userdb.keys();
-    console.log(allkeys);
+    // console.log(allkeys);
     // 获取当前时间
     const now = new Date();
 
