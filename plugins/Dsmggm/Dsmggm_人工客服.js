@@ -7,6 +7,7 @@
  * @rule ^(人工)$
  * @rule ^(人工服务)$
  * @rule ^(人工客服)$
+ * @rule ^(客服)$
  * @admin false
  * @public false
  * @priority 99999
@@ -18,7 +19,7 @@
 
 // 插件说明内容
 const describe_text =`
-当用户请求人工客服，可以进行留言并通知管理员
+当用户请求人工客服，可以进行通知管理员，并转发留言给管理员
 `;
 
 
