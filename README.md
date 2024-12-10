@@ -1,11 +1,23 @@
 # 说明
-Bncr打赏插件  
+## 赞赏插件
 1、仅适配对接gewechat  
 2、其它说明懒得写，看插件吧  
 3、有异常请联系Bncr社区群[TG频道](https://t.me/BncrJS)  
+## 监测赞赏码信息
+1、配合赞赏插件使用，说明也看插件，懒得写
+## 人工客服
+1、给用户转发留言信息给管理员
+2、自定义管理员
+## 交互式菜单
+1、可交互式使用菜单
+2、可触发插件
 
-# sub订阅地址
-暂未启用
+# 订阅地址
+github
+<pre>
+https://github.com/dsmggm/bncr.git
+</pre>
+sub:暂未启用
 <pre>
 bncrSub://3BPeb/Ff4FlBAx372D99jSypngdaBgs9ww6Y8UwuGV/GhsJIXmNRFKrmSuDXYSDs7YcUlX16K9ecd44TJ62jNWv7ADd0aPZcc2coVc4BBSE=
 </pre>
@@ -18,4 +30,4 @@ bncrSub://3BPeb/Ff4FlBAx372D99jSypngdaBgs9ww6Y8UwuGV/GhsJIXmNRFKrmSuDXYSDs7YcUlX
 
 # 其它
 个人其它项目：  
-狗东自动登录[svjdck](https://github.com/dsmggm/svjdck)
+狗东自动登录[svjdck](https://github.com/dsmggm/svjdck)账密自动登录提交ck到ql
