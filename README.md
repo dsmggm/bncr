@@ -15,3 +15,7 @@ bncrSub://3BPeb/Ff4FlBAx372D99jSypngdaBgs9ww6Y8UwuGV/GhsJIXmNRFKrmSuDXYSDs7YcUlX
 如果你觉得他很菜，你可以扫码支持他  
 ![给点钱花花](get_me_some_money.jpg)  
 您的支持是我更新的动力,Thank~
+
+# 其它
+个人其它项目：  
+狗东自动登录[svjdck](https://github.com/dsmggm/svjdck)
