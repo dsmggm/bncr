@@ -25,7 +25,7 @@ const describe_text =`
 2、打赏记录：<br>
 需要搭配《监测赞赏码信息》插件。<br>
 打赏只记录《打赏金额》，《微信名》，《留言》，《打赏时间》<br>
-数据记录到无界的数据库user中的Reward_data表，键为打赏者id+打赏时间(对机器人说'我的id'返回)，值为全部信息<br>
+数据记录到无界的数据库user中的Reward_data跟Reward_data_NoneUsers表，键为打赏者id+打赏时间(对机器人说'我的id'返回)，值为全部信息<br>
 如果需要高性能可自行搭建redis或mysql之类的，自行对插件代码进行二次开发。<br>
 3、插件获取打赏记录：<br>
 插件开发可以用const dsdb = new BncrDB('Reward_data');  获取到数据<br>

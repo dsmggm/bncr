@@ -2,7 +2,7 @@
  * @author Dsmggm
  * @name Dsmggm_监测赞赏码信息
  * @team Dsmggm
- * @version 1.0.5
+ * @version 1.0.6
  * @description 监控赞赏码的插件，需要安装xml2js模块，需要登录微信才可使用，测试仅支持gewechat，借鉴于南下风来，感谢“南下风来”提供的匹配方式。用了都说妙~
  * @rule https:\/\/[A-Za-z0-9\-\._~:\/\?#\[\]@!$&'\*\+,%;\=]*
  * @parallel true 
@@ -90,7 +90,7 @@ const ConfigDB = new BncrPluginConfig(jsonSchema);
 // 写入数据库
 const inputdb = async (amount, from, lmessage, time) => {
   try {
-    const userdb = new BncrDB('Reward_data');
+    const userdb = new BncrDB('Reward_data_NoneUsers');
     const valueToStore = {
       收款金额: amount,
       赞赏人: from,
@@ -143,12 +143,13 @@ module.exports = async (s) => {
     try {
       const appmsg = result.msg.appmsg[0];
       const amount = appmsg.des[0].match(/收款金额￥([\d.]+)/)[1];
-      const from = appmsg.des[0].match(/来自([^\n]+)/)[1].trim();
-      // const lmessage = appmsg.des[0].match(/付款方留言([^\n]+)/)[1].trim();
+      let from = '匿名赞赏';
+      try {
+        from = appmsg.des[0].match(/来自([^\n]+)/)[1].trim();
+      } catch (parseError) {}
       let lmessage = '无留言';
       try {
         lmessage = appmsg.des[0].match(/付款方留言([^\n]+)/)[1].trim();
-        console.log(lmessage);
       } catch (parseError) {}
       const time = appmsg.des[0].match(/到账时间([^\n]+)/)[1].trim();
       
