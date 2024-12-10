@@ -2,7 +2,7 @@
  * @author Dsmggm
  * @name Dsmggm_人工客服
  * @team Dsmggm
- * @version 1.0.1
+ * @version 1.0.2
  * @description 当用户请求人工客服，可以进行留言并通知管理员。用了都说妙~
  * @rule ^(人工)$
  * @rule ^(人工服务)$
@@ -104,10 +104,19 @@ module.exports = async (s) => {
   await s.reply('已经帮您通知管理员，请留言');
   let From = s.getFrom(); //  获取获取平台
   let UserName = s.getUserName();
-  pushAdmin(ConfigDB, `${From}平台${UserName}用户呼叫人工服务`);
+  if (UserName === undefined) {
+    await pushAdmin(ConfigDB, `${From}平台用户呼叫人工服务`);
+  } else {
+    await pushAdmin(ConfigDB, `${From}平台${UserName}用户呼叫人工服务`);
+  }
   await s.waitInput(async (s) => {
     const message = s.getMsg();
-    const pushMessage = `${From}平台留言:\n${UserName}留言内容：${message}`
+    let pushMessage = ''
+    if (UserName === undefined) {
+      pushMessage = `${From}平台留言:\n留言内容：${message}`
+    } else {
+      pushMessage = `${From}平台留言:\n${UserName}留言内容：${message}`
+    }
     await pushAdmin(ConfigDB, pushMessage); // 通知管理员函数
     await s.reply('留言成功，请耐心等待人工回复，已退出');
   }, 120); 
