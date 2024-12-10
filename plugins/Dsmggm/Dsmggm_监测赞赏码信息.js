@@ -2,8 +2,8 @@
  * @author Dsmggm
  * @name Dsmggm_监测赞赏码信息
  * @team Dsmggm
- * @version 1.0.4
- * @description 监控赞赏码的插件，需要安装xml2js模块，需要登录微信才可使用，测试仅支持gewechat，借鉴于南下风来，感谢南下风来
+ * @version 1.0.5
+ * @description 监控赞赏码的插件，需要安装xml2js模块，需要登录微信才可使用，测试仅支持gewechat，借鉴于南下风来，感谢“南下风来”提供的匹配方式。用了都说妙~
  * @rule https:\/\/[A-Za-z0-9\-\._~:\/\?#\[\]@!$&'\*\+,%;\=]*
  * @parallel true 
  * // 并行-匹配规则与spy相同的时候可以打开.把//改成@
@@ -35,7 +35,7 @@ const describe_text =`
 如非插件异常，自寻教程或咨询无界社区群。<br>
 <br>
 4、已知BUG：<br>
-因为打赏获取到的信息只有《打赏金额》《微信名》《留言》《打赏时间》，与触发打赏插件结合使用确认打赏者。<br>
+因为打赏获取到的信息只有《打赏金额》《微信名》《留言》《打赏时间》，与赞赏插件结合使用确认打赏者。<br>
 `;
 
 // 日志函数
@@ -119,12 +119,12 @@ module.exports = async (s) => {
   // 初始化保存判断
   if(!Object.keys(ConfigDB.userConfig).length){
     logMessage('INFO', '插件未启用~');
-    return
+    return 'next';  // 继续向下匹配插件
   }
   // 开关判断
   if (ConfigDB.userConfig.switch.enable == false) {
     logMessage('INFO', '插件未启用~');
-    return;
+    return 'next';  // 继续向下匹配插件
   }
 
   // 解析打赏xml内容
@@ -136,7 +136,7 @@ module.exports = async (s) => {
   parser.parseString(xmlString, async (err, result) => {
     if (err) {
       logMessage('ERROR', '接收到的貌似不是xml信息，插件跳过处理~');
-      return;
+      return 'next';  // 继续向下匹配插件
     }
 
     // 处理收款信息
@@ -181,5 +181,7 @@ module.exports = async (s) => {
       logMessage('ERROR', `解析数据出错，可能是转账，报错代码：${parseError}`);
     }
   });
+  
+  return 'next';  // 继续向下匹配插件
 };
 

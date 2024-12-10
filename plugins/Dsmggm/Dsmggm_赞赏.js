@@ -2,8 +2,8 @@
  * @author Dsmggm
  * @name Dsmggm_赞赏
  * @team Dsmggm
- * @version 1.0.5
- * @description 请求赞赏，返回赞赏
+ * @version 1.0.6
+ * @description 请求赞赏，记录用户ID与赞赏内容到无界数据库，便于其它插件读取赞赏数据。用了都说妙~
  * @rule ^(赞赏)$
  * @rule ^(赞赏码)$
  * @rule ^(打款)$
@@ -74,7 +74,8 @@ const ConfigDB = new BncrPluginConfig(jsonSchema);
 
 // 检查付款
 async function check_money(s) {
-    const userdb = new BncrDB('Reward_data');
+    const userdb = new BncrDB('Reward_data_NoneUsers');
+    const userdb_user = new BncrDB('Reward_data');
     const allkeys = await userdb.keys();
     // console.log(allkeys);
     // 获取当前时间
@@ -100,7 +101,7 @@ async function check_money(s) {
       const only = await userdb.get(recentKeys[0]);
       const userid = await s.getUserId();
       // const status = await userdb.set(userid, only);
-      const status = await userdb.set(userid + '@' + only.到账时间 ,only);
+      const status = await userdb_user.set(userid + '@' + only.到账时间 ,only);
       await userdb.del(recentKeys[0]);   // 删除
       if (status === true) {
         const text = `收到打赏 \n赞赏人： ${only.赞赏人} \n赞赏金额：${only.收款金额} \n留言：${only.打赏留言}  \n赞赏时间：${only.到账时间} `
@@ -150,7 +151,7 @@ async function check_money(s) {
           const only = await userdb.get(recentKeys[num]);
           const userid = await s.getUserId();
           // const status = await userdb.set(userid, only);
-          const status = await userdb.set(userid + '@' + only.到账时间 ,only);
+          const status = await userdb_user.set(userid + '@' + only.到账时间 ,only);
           await userdb.del(recentKeys[num]);   // 删除
           if (status === true) {
             const text = `收到打赏 \n赞赏人： ${only.赞赏人} \n赞赏金额：${only.收款金额} \n留言：${only.打赏留言}  \n赞赏时间：${only.到账时间} `
@@ -175,12 +176,12 @@ module.exports = async (s) => {
     // 初始化保存判断
     if(!Object.keys(ConfigDB.userConfig).length){
       logMessage('INFO', '插件未启用~');
-      return
+      return 'next';  // 继续向下匹配插件
     }
     // 开关判断
     if (ConfigDB.userConfig.switch.enable == false) {
       logMessage('INFO', '插件未启用~');
-      return;
+      return 'next';  // 继续向下匹配插件
     }
     
     // 发赞赏码
@@ -229,4 +230,5 @@ module.exports = async (s) => {
 
     // 检查是否已经付款
     await check_money(s);
+  return 'next';  // 继续向下匹配插件
 };

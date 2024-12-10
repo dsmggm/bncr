@@ -2,8 +2,8 @@
  * @author Dsmggm
  * @name Dsmggm_人工客服
  * @team Dsmggm
- * @version 1.0.0
- * @description 当用户请求人工客服，可以进行留言并通知管理员
+ * @version 1.0.1
+ * @description 当用户请求人工客服，可以进行留言并通知管理员。用了都说妙~
  * @rule ^(人工)$
  * @rule ^(人工服务)$
  * @rule ^(人工客服)$
@@ -93,12 +93,12 @@ module.exports = async (s) => {
   // 初始化保存判断
   if(!Object.keys(ConfigDB.userConfig).length){
     logMessage('INFO', '插件未启用~');
-    return
+    return 'next';  // 继续向下匹配插件
   }
   // 开关判断
   if (ConfigDB.userConfig.switch.enable == false) {
     logMessage('INFO', '插件未启用~');
-    return;
+    return 'next';  // 继续向下匹配插件
   }
 
   await s.reply('已经帮您通知管理员，请留言');
@@ -111,4 +111,6 @@ module.exports = async (s) => {
     await pushAdmin(ConfigDB, pushMessage); // 通知管理员函数
     await s.reply('留言成功，请耐心等待人工回复，已退出');
   }, 120); 
+
+  return 'next';  // 继续向下匹配插件
 }
