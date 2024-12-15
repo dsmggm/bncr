@@ -2,11 +2,11 @@
  * @author Dsmggm
  * @name Dsmggm_监测赞赏码信息
  * @team Dsmggm
- * @version 1.0.6
+ * @version 1.0.8
  * @description 监控赞赏码的插件，需要安装xml2js模块，需要登录微信才可使用，测试仅支持gewechat，借鉴于南下风来，感谢“南下风来”提供的匹配方式。用了都说妙~
  * @rule https:\/\/[A-Za-z0-9\-\._~:\/\?#\[\]@!$&'\*\+,%;\=]*
  * @parallel true 
- * // 并行-匹配规则与spy相同的时候可以打开.把//改成@
+ * parallel并行-匹配规则与spy相同的时候可以打开
  * @admin false
  * @public true
  * @priority 99999
@@ -24,7 +24,7 @@ const describe_text =`
 <br>
 2、打赏记录：<br>
 打赏只记录《打赏金额》，《微信名》，《留言》，《打赏时间》<br>
-数据记录到无界的数据库user中的Reward_data表，键为打赏时间，值为全部信息<br>
+数据记录到无界的数据库user中的Reward_data_NoneUsers表，键为打赏时间，值为全部信息<br>
 如果需要高性能可自行搭建redis或mysql之类的，自行对插件代码进行二次开发。<br>
 <br>
 3、关于异常：<br>
@@ -41,7 +41,6 @@ const describe_text =`
 // 日志函数
 const logMessage = (level, message) => {
   const timestamp = sysMethod.getTime('yyyy-MM-dd hh:mm:ss');
-  // console.log(`[${timestamp}] [${level}] Dsmggm_监测赞赏码信息 - ${message}`);
 
   // 根据 level 选择合适的 console 方法
   switch (level) {
@@ -168,6 +167,7 @@ module.exports = async (s) => {
 
       // console.log(ConfigDB.userConfig.option)
       // 通知管理员
+      
       const rooms = ConfigDB.userConfig.option.rooms;
       for (const room of rooms) {
         const uid = room.uid;

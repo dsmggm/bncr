@@ -2,7 +2,7 @@
  * @author Dsmggm
  * @name Dsmggm_人工客服
  * @team Dsmggm
- * @version 1.0.2
+ * @version 1.0.3
  * @description 当用户请求人工客服，可以进行留言并通知管理员。用了都说妙~
  * @rule ^(人工)$
  * @rule ^(人工服务)$
@@ -26,24 +26,23 @@ const describe_text =`
 // 日志函数
 const logMessage = (level, message) => {
   const timestamp = sysMethod.getTime('yyyy-MM-dd hh:mm:ss');
-  // console.log(`[${timestamp}] [${level}] Dsmggm_监测赞赏码信息 - ${message}`);
   
   // 根据 level 选择合适的 console 方法
   switch (level) {
     case 'ERROR':
-      console.error(`[${timestamp}] [${level}] Dsmggm_监测赞赏码信息 - ${message}`);
+      console.error(`[${timestamp}] [${level}] Dsmggm_人工客服 - ${message}`);
       break;
     case 'WARN':
-      console.warn(`[${timestamp}] [${level}] Dsmggm_监测赞赏码信息 - ${message}`);
+      console.warn(`[${timestamp}] [${level}] Dsmggm_人工客服 - ${message}`);
       break;
     case 'INFO':
-      console.info(`[${timestamp}] [${level}] Dsmggm_监测赞赏码信息 - ${message}`);
+      console.info(`[${timestamp}] [${level}] Dsmggm_人工客服 - ${message}`);
       break;
     case 'DEBUG':
-      console.debug(`[${timestamp}] [${level}] Dsmggm_监测赞赏码信息 - ${message}`);
+      console.debug(`[${timestamp}] [${level}] Dsmggm_人工客服 - ${message}`);
       break;
     default:
-      console.log(`[${timestamp}] [${level}] Dsmggm_监测赞赏码信息 - ${message}`);
+      console.log(`[${timestamp}] [${level}] Dsmggm_人工客服 - ${message}`);
       break;
   }
 };

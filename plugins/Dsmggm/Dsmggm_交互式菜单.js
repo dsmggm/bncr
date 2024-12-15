@@ -2,7 +2,7 @@
  * @author Dsmggm
  * @name Dsmggm_交互式菜单
  * @team Dsmggm
- * @version 1.0.0
+ * @version 1.0.1
  * @description 交互式菜单，可以设置是否触发插件，目前仅测试了Gewechat。用了都说妙~
  * @rule ^(菜单)$
  * @rule ^(帮助)$
@@ -37,44 +37,27 @@ const describe_text =`
 // 日志函数
 const logMessage = (level, message) => {
   const timestamp = sysMethod.getTime('yyyy-MM-dd hh:mm:ss');
-  // console.log(`[${timestamp}] [${level}] Dsmggm_监测赞赏码信息 - ${message}`);
   
   // 根据 level 选择合适的 console 方法
   switch (level) {
     case 'ERROR':
-      console.error(`[${timestamp}] [${level}] Dsmggm_监测赞赏码信息 - ${message}`);
+      console.error(`[${timestamp}] [${level}] Dsmggm_交互式菜单 - ${message}`);
       break;
     case 'WARN':
-      console.warn(`[${timestamp}] [${level}] Dsmggm_监测赞赏码信息 - ${message}`);
+      console.warn(`[${timestamp}] [${level}] Dsmggm_交互式菜单 - ${message}`);
       break;
     case 'INFO':
-      console.info(`[${timestamp}] [${level}] Dsmggm_监测赞赏码信息 - ${message}`);
+      console.info(`[${timestamp}] [${level}] Dsmggm_交互式菜单 - ${message}`);
       break;
     case 'DEBUG':
-      console.debug(`[${timestamp}] [${level}] Dsmggm_监测赞赏码信息 - ${message}`);
+      console.debug(`[${timestamp}] [${level}] Dsmggm_交互式菜单 - ${message}`);
       break;
     default:
-      console.log(`[${timestamp}] [${level}] Dsmggm_监测赞赏码信息 - ${message}`);
+      console.log(`[${timestamp}] [${level}] Dsmggm_交互式菜单 - ${message}`);
       break;
   }
 };
 
-// 触发插件函数， 传入触发文明msg， 传入对话对象s
-async function TriggerPlugin(msg, s) {
-  await sysMethod.sleep(1);
-  const from = s.getFrom();
-  const userid = s.getUserId();
-  const groupid = s.getGroupId();
-  const friendid = '0';
-  const msgInfo = {
-    type: 'text',
-    msg: msg,
-    userId: userid || '0',
-    groupId: groupid || '0',
-    friendId: friendid|| '0',
-  }
-  sysMethod.Adapters(msgInfo, from, 'inlinemask', msgInfo); 
-}
 
 
 
@@ -107,6 +90,26 @@ const jsonSchema = BncrCreateSchema.object({
 })
 /* 完成后new BncrPluginConfig传递该jsonSchema */
 const ConfigDB = new BncrPluginConfig(jsonSchema);
+
+
+
+
+// 触发插件函数， 传入触发文明msg， 传入对话对象s
+async function TriggerPlugin(msg, s) {
+  await sysMethod.sleep(1);
+  const from = s.getFrom();
+  const userid = s.getUserId();
+  const groupid = s.getGroupId();
+  const friendid = '0';
+  const msgInfo = {
+    type: 'text',
+    msg: msg,
+    userId: userid || '0',
+    groupId: groupid || '0',
+    friendId: friendid|| '0',
+  }
+  sysMethod.Adapters(msgInfo, from, 'inlinemask', msgInfo); 
+}
 
 // 插件主函数
 module.exports = async (s) => {
