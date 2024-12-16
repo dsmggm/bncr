@@ -16,13 +16,15 @@
  * @cron 1 1 1 1 * *
  */
 
+const { log } = require('console');
+
 // 插件说明内容
 const describe_text = `
 无需填写无界ip与账号密码，即可使用更新插件功能。<br>
 <br>
 1. 更新命令“插件更新”或“更新插件”。 <br>
 2. 更新模式有三种，分别为："全部更新"，"黑名单"，"白名单"三种模式。 <br>
-3. 可设置定时运行，修改脚本顶部注释块，使用cron时间规则，不懂默认即可，默认1天更新一次。 <br>
+3. 可设置定时运行，使用cron时间规则，不懂默认即可，默认1天更新一次。 <br>
 4. 插件更新后，可选重启无界。 <br>
 `;
 
@@ -59,7 +61,7 @@ const jsonSchema = BncrCreateSchema.object({
   reboot: BncrCreateSchema.boolean().setTitle('重启开关').setDescription(`更新插件后是否自动重启`).setDefault(false),
   
   // cron定时
-  // cron: BncrCreateSchema.string().setTitle('定时运行设置').setDescription(`遵循cron定时规则，默认1天运行一次`).setDefault('1 1 1 1 * *'),
+  cron: BncrCreateSchema.string().setTitle('定时运行设置').setDescription(`遵循cron定时规则（秒 分 时 天 月 周），如（1 1 1 1 * *），默认1天运行一次`).setDefault('1 1 1 1 * *'),
 
   // 模式
   Select: BncrCreateSchema.string().setTitle('模式').setDescription('选择更新插件的方式，黑名单，白名单，全部更新').setEnum(['全部更新', '黑名单', '白名单']),
@@ -202,7 +204,7 @@ async function installPlugins(token, plugins, s) {
   }
 }
 
-// 主函数，执行所有步骤
+// 匹配更新模式
 function selectplugins(installedPlugins) {
   // 获取模式配置
   const mode = ConfigDB.userConfig.Select;
@@ -229,6 +231,52 @@ function selectplugins(installedPlugins) {
   }
 }
 
+// 定时任务函数
+async function cron_task(crontime) {
+  // 判断是不是cron
+  const cron_y_n = await sysMethod.cron.isCron(crontime);
+  if (cron_y_n) {
+    // 获取当前模块文件的绝对路径
+    const filePath = module.filename;
+    // 读取文件内容
+    const fs = require('fs');
+    fs.readFile(filePath, 'utf8', (err, data) => {
+      if (err) {
+        logMessage('error', `读取文件失败: ${err}`);
+        return;
+      }
+
+      // 原始字符串数据
+      let fileContent = data.toString();
+
+      // 匹配规则
+      const regex = /^\s*\*\s*@cron\s+.*/mg;
+
+      // 提取文件的定时规则
+      const currentCronMatch = regex.exec(fileContent);
+
+      // 设置的定时任务规则
+      const crontime_set = ` * @cron ${crontime}`
+
+      // 替换文本
+      if (currentCronMatch) {
+        fileContent = fileContent.replace(regex, crontime_set);
+      }
+
+      // 写回文件
+      fs.writeFile(filePath, fileContent, 'utf8', (err) => {
+        if (err) {
+          logMessage('error', `写入文件失败: ${err}`);
+          return;
+        }
+        logMessage('info', '更新定时任务成功');
+      });
+    });
+  } else {
+    logMessage('error', '定时参数设置错误，请检查插件配置');
+    return;
+  }
+}
 
 module.exports = async (s) => {
   await ConfigDB.get();
@@ -243,10 +291,6 @@ module.exports = async (s) => {
     logMessage('INFO', '插件未启用~');
     return 'next';
   }
-
-  // sysMethod.cron.newCron('50 * * * * *', () => {
-  //   sysMethod.inline('更新插件');
-  // });
 
   // 更新主函数
   try {
@@ -279,42 +323,13 @@ module.exports = async (s) => {
   }
 
   // 设置定时
-  // const crontime = ConfigDB.userConfig.cron;
-  // cron_y_n = await sysMethod.cron.isCron(crontime);
-  // if (cron_y_n == true) {
-  //   const fs = require('fs');
-  //   // ^(\s* @cron).*$
-  //   const filePath = module.filename
-    
-  //   // 读取文件内容
-  //   fs.readFile(filePath, 'utf8', (err, data) => {
-  //     if (err) {
-  //       logMessage('error', `读取文件失败:${err}`);
-  //       return;
-  //     }
-
-  //     // 原始字符串数据
-  //     let fileContent = data.toString();
-
-  //     // 使用正则表达式匹配并替换每行中的 @cron 行
-  //     fileContent = fileContent.replace(/^(\s*@cron).*$/gm, (match, p1) => {
-  //       return `${p1}${crontime}`; // 替换为新的cron表达式
-  //     });
-
-  //     // 写回文件
-  //     fs.writeFile(filePath, fileContent, 'utf8', (err) => {
-  //       if (err) {
-  //         logMessage('error', `写入文件失败:${err}`);
-  //         return;
-  //       }
-  //       logMessage('info', '更新定时任务成功');
-  //     });
-  //   });
-  // }
-
+  const crontime = ConfigDB.userConfig.cron;
+  await cron_task(crontime);
 
   // 重启
   if (ConfigDB.userConfig.reboot == true) {
+    // 等5秒重启
+    await sysMethod.sleep(5);
     sysMethod.inline('重启');
   }
   
