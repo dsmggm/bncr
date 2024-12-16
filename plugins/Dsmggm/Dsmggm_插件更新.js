@@ -2,7 +2,7 @@
  * @author Dsmggm
  * @name Dsmggm_插件更新
  * @team Dsmggm
- * @version 1.0.0
+ * @version 1.0.1
  * @description 交互式菜单，可以设置是否触发插件，目前仅测试了Gewechat。用了都说妙~
  * @rule ^(插件更新)$
  * @rule ^(更新插件)$
@@ -24,7 +24,6 @@ const describe_text = `
 2. 更新模式有三种，分别为："全部更新"，"黑名单"，"白名单"三种模式。 <br>
 3. 可设置定时运行，修改脚本顶部注释块，使用cron时间规则，不懂默认即可，默认1天更新一次。 <br>
 4. 插件更新后，可选重启无界。 <br>
-5. 插件更新规则是不管是否有可升级都进行重新拉取。 <br>
 `;
 
 // 日志函数
@@ -58,12 +57,15 @@ const jsonSchema = BncrCreateSchema.object({
   
   // 重启按钮
   reboot: BncrCreateSchema.boolean().setTitle('重启开关').setDescription(`更新插件后是否自动重启`).setDefault(false),
+  
+  // cron定时
+  // cron: BncrCreateSchema.string().setTitle('定时运行设置').setDescription(`遵循cron定时规则，默认1天运行一次`).setDefault('1 1 1 1 * *'),
 
   // 模式
   Select: BncrCreateSchema.string().setTitle('模式').setDescription('选择更新插件的方式，黑名单，白名单，全部更新').setEnum(['全部更新', '黑名单', '白名单']),
   
   // 名单列表
-  rooms: BncrCreateSchema.array(BncrCreateSchema.string().setTitle('').setDefault('')).setTitle('名单列表').setDescription('设置白名单或黑名单列表，如:\'qq.js\'。只有在黑名单模式跟白名单模式有效'),
+  rooms: BncrCreateSchema.array(BncrCreateSchema.string().setTitle('').setDefault('')).setTitle('名单列表').setDescription('设置白名单或黑名单列表，如：qq.js ，只有在黑名单模式跟白名单模式有效'),
 
   // 说明
   describe: BncrCreateSchema.object({}).setTitle('说明').setDescription(describe_text).setDefault({})
@@ -140,7 +142,7 @@ function filterInstalledPlugins(pluginsData) {
     if (data.pluginsList) {
       // 遍历每个插件列表
       for (const plugin of data.pluginsList) {
-        if (plugin.isInstall) {
+        if (plugin.isUpdate) {
           plugin.remarks = data.remarks;
           plugin.subUrl = data.subUrl;
           installedPlugins.push(plugin);
@@ -152,7 +154,7 @@ function filterInstalledPlugins(pluginsData) {
 }
 
 // 第五步：安装插件
-async function installPlugins(token, plugins) {
+async function installPlugins(token, plugins, s) {
   for (const plugin of plugins) {
     try {
       // 获取插件内容
@@ -184,6 +186,11 @@ async function installPlugins(token, plugins) {
           okMsg: `安装插件 ${plugin.filename} 成功!`
         })
       });
+
+      if (installResponse.ok) {
+        s.reply(`插件 ${plugin.filename} 安装成功`);
+      }
+
 
       if (!installResponse.ok) {
         throw new Error(`安装插件 ${plugin.filename} 失败`);
@@ -263,7 +270,7 @@ module.exports = async (s) => {
     const pluginslist = selectplugins(installedPlugins);
   
     // 安装插件
-    await installPlugins(token, pluginslist);
+    await installPlugins(token, pluginslist, s);
   
     await s.reply('更新完成');
   } catch (error) {
@@ -271,6 +278,42 @@ module.exports = async (s) => {
     s.reply(`插件更新失败：${error}`);
   }
 
+  // 设置定时
+  // const crontime = ConfigDB.userConfig.cron;
+  // cron_y_n = await sysMethod.cron.isCron(crontime);
+  // if (cron_y_n == true) {
+  //   const fs = require('fs');
+  //   // ^(\s* @cron).*$
+  //   const filePath = module.filename
+    
+  //   // 读取文件内容
+  //   fs.readFile(filePath, 'utf8', (err, data) => {
+  //     if (err) {
+  //       logMessage('error', `读取文件失败:${err}`);
+  //       return;
+  //     }
+
+  //     // 原始字符串数据
+  //     let fileContent = data.toString();
+
+  //     // 使用正则表达式匹配并替换每行中的 @cron 行
+  //     fileContent = fileContent.replace(/^(\s*@cron).*$/gm, (match, p1) => {
+  //       return `${p1}${crontime}`; // 替换为新的cron表达式
+  //     });
+
+  //     // 写回文件
+  //     fs.writeFile(filePath, fileContent, 'utf8', (err) => {
+  //       if (err) {
+  //         logMessage('error', `写入文件失败:${err}`);
+  //         return;
+  //       }
+  //       logMessage('info', '更新定时任务成功');
+  //     });
+  //   });
+  // }
+
+
+  // 重启
   if (ConfigDB.userConfig.reboot == true) {
     sysMethod.inline('重启');
   }
