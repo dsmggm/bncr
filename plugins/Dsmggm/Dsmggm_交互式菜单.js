@@ -7,7 +7,7 @@
  * @rule ^(菜单)$
  * @rule ^(帮助)$
  * @admin false
- * @public true
+ * @public false
  * @priority 99999
  * // 是否服务模块，true不会作为插件加载，会在系统启动时执行该插件内容
  * @service false
@@ -152,12 +152,13 @@ module.exports = async (s) => {
       pushMessage += `${key}. ${menus[key]}\n`;
     }
     pushMessage += 'q. 退出';
-    await sysMethod.push({
-        platform: s.getFrom(),
-        groupId: '0',
-        userId: s.getUserId(),
-        msg: pushMessage,
-    });
+    // await sysMethod.push({
+    //     platform: s.getFrom(),
+    //     groupId: '0',
+    //     userId: s.getUserId(),
+    //     msg: pushMessage,
+    // });
+    await s.reply(pushMessage);
 
     // 等待用户输入，超时时间为120秒
     let newMsg2 = await s.waitInput(() => {}, 120);
@@ -195,12 +196,13 @@ module.exports = async (s) => {
         pushMessage += `${key}. ${menus[key]}\n`;
       }
       pushMessage += 'q. 退出';
-      await sysMethod.push({
-          platform: s.getFrom(),
-          groupId: '0',
-          userId: s.getUserId(),
-          msg: pushMessage,
-      });
+      // await sysMethod.push({
+      //     platform: s.getFrom(),
+      //     groupId: '0',
+      //     userId: s.getUserId(),
+      //     msg: pushMessage,
+      // });
+      await s.reply(pushMessage);
 
 
 
