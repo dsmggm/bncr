@@ -2,8 +2,8 @@
  * @author Dsmggm
  * @name Dsmggm_插件更新
  * @team Dsmggm
- * @version 1.0.1
- * @description 交互式菜单，可以设置是否触发插件，目前仅测试了Gewechat。用了都说妙~
+ * @version 1.0.2
+ * @description 插件更新插件，支持黑名单，白名单，全部更新模式。
  * @rule ^(插件更新)$
  * @rule ^(更新插件)$
  * @admin true
