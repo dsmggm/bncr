@@ -167,7 +167,6 @@ module.exports = async (s) => {
 
       // console.log(ConfigDB.userConfig.option)
       // 通知管理员
-      
       const rooms = ConfigDB.userConfig.option.rooms;
       for (const room of rooms) {
         const uid = room.uid;
