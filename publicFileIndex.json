@@ -1,27 +1,5 @@
 {
   "annotation": "该文件由系统自动生成. 用于插件市场索引,请勿编辑该文件中的任何内容",
-  "B7JL6g6tMyOvRFrfffFO1gMSiIQ=": {
-    "type": "github",
-    "name": "Dsmggm_交互式菜单",
-    "author": "Dsmggm",
-    "team": "Dsmggm",
-    "version": "1.0.1",
-    "description": "交互式菜单，可以设置是否触发插件，目前仅测试了Gewechat。用了都说妙~",
-    "classification": [
-      "工具"
-    ],
-    "filename": "Dsmggm_交互式菜单.js",
-    "fileDir": "/plugins/Dsmggm/Dsmggm_交互式菜单.js",
-    "systemVersionRange": "",
-    "isCron": false,
-    "isAdapter": false,
-    "isMod": false,
-    "isService": false,
-    "isAuthentication": false,
-    "isEncPlugin": false,
-    "id": "B7JL6g6tMyOvRFrfffFO1gMSiIQ=",
-    "isChatPlugin": true
-  },
   "OPr+rIyd2aa7UJA4mtWer0y4oDs=": {
     "type": "github",
     "name": "Dsmggm_人工客服",
