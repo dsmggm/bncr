@@ -19,7 +19,7 @@ const describe_text =`
 1、设置电脑开机唤醒功能，需要设置BIOS与网口唤醒功能，具体请自行百度查询设置方法<br>
 2、需要电脑MAC与固定IP地址<br>
 3、仅管理员可使用<br>
-4、需要安装wake_on_lan依赖包，执行命令：npm i wake_on_lan<br>
+4、需要安装wake_on_lan依赖包，安装执行命令：npm i wake_on_lan<br>
 `;
 
 const wol = require('wake_on_lan');
