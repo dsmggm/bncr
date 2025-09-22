@@ -8,6 +8,7 @@
  * @rule ^(开机)$
  * @rule ^(唤醒电脑)$
  * @rule ^(开机电脑)$
+  * @rule ^(打开电脑)$
  * @admin true
  * @public true
  * @priority 99999
@@ -24,6 +25,8 @@ const describe_text =`
 3、仅管理员可使用<br>
 4、需要安装wake_on_lan依赖包，执行命令：npm i wake_on_lan<br>
 `;
+
+const wol = require('wake_on_lan');
 
 
 // 日志函数
@@ -81,8 +84,9 @@ module.exports = async (s) => {
     return 'next';  // 继续向下匹配插件
   }
 
-  const wol = require('wake_on_lan');
-  
+
+  logMessage('INFO', '正在请求开机...');
+  s.reply('正在请求开机...');
   wol.wake(ConfigDB.userConfig.switch.mac, {
       address: ConfigDB.userConfig.switch.ip,
       port: 9
