@@ -4,11 +4,7 @@
  * @team Dsmggm
  * @version 1.0.0
  * @description 唤醒电脑开机，需要提前设置网口与BIOS，具体请自行百度查询设置方法
- * @rule ^(电脑开机)$
- * @rule ^(开机)$
- * @rule ^(唤醒电脑)$
- * @rule ^(开机电脑)$
- * @rule ^(打开电脑)$
+ * @rule ^(电脑开机|开机|唤醒电脑|开机电脑|打开电脑)$
  * @admin true
  * @public true
  * @priority 99999
