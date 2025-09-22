@@ -22,18 +22,18 @@
     "id": "B7JL6g6tMyOvRFrfffFO1gMSiIQ=",
     "isChatPlugin": true
   },
-  "OPr+rIyd2aa7UJA4mtWer0y4oDs=": {
+  "1kCH5Pom9bPteL0g22BMViqqF3Y=": {
     "type": "github",
-    "name": "Dsmggm_人工客服",
+    "name": "Dsmggm_唤醒开机",
     "author": "Dsmggm",
     "team": "Dsmggm",
-    "version": "1.0.3",
-    "description": "当用户请求人工客服，可以进行留言并通知管理员。用了都说妙~",
+    "version": "1.0.8",
+    "description": "唤醒电脑开机，需要提前设置网口与BIOS，具体请自行百度查询设置方法",
     "classification": [
       "工具"
     ],
-    "filename": "Dsmggm_人工客服.js",
-    "fileDir": "/plugins/Dsmggm/Dsmggm_人工客服.js",
+    "filename": "Dsmggm_唤醒开机.js",
+    "fileDir": "/plugins/Dsmggm/Dsmggm_唤醒开机.js",
     "systemVersionRange": "",
     "isCron": false,
     "isAdapter": false,
@@ -41,7 +41,7 @@
     "isService": false,
     "isAuthentication": false,
     "isEncPlugin": false,
-    "id": "OPr+rIyd2aa7UJA4mtWer0y4oDs=",
+    "id": "1kCH5Pom9bPteL0g22BMViqqF3Y=",
     "isChatPlugin": true
   },
   "uPBlExO5epsn6JF42McxeuJpQu0=": {
