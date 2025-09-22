@@ -8,7 +8,7 @@
  * @rule ^(开机)$
  * @rule ^(唤醒电脑)$
  * @rule ^(开机电脑)$
-  * @rule ^(打开电脑)$
+ * @rule ^(打开电脑)$
  * @admin true
  * @public true
  * @priority 99999
