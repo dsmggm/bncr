@@ -27,7 +27,7 @@
     "name": "Dsmggm_唤醒开机",
     "author": "Dsmggm",
     "team": "Dsmggm",
-    "version": "1.0.8",
+    "version": "1.0.0",
     "description": "唤醒电脑开机，需要提前设置网口与BIOS，具体请自行百度查询设置方法",
     "classification": [
       "工具"
