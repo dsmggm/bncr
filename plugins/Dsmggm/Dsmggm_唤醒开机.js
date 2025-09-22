@@ -2,7 +2,7 @@
  * @author Dsmggm
  * @name Dsmggm_唤醒开机
  * @team Dsmggm
- * @version 1.0.8
+ * @version 1.0.0
  * @description 唤醒电脑开机，需要提前设置网口与BIOS，具体请自行百度查询设置方法
  * @rule ^(电脑开机)$
  * @rule ^(开机)$
@@ -56,8 +56,8 @@ const jsonSchema = BncrCreateSchema.object({
     // 开关
     switch: BncrCreateSchema.object({
       enable: BncrCreateSchema.boolean().setTitle('插件开关').setDescription(`设置为关则插件不启用`).setDefault(false),
-      ip:BncrCreateSchema.string().setTitle('电脑固定IP').setDescription(`需要设置固定IP`).setDefault('192.168.1.11')
-      mac.BncrCreateSchema.string().setTitle('电脑MAC地址：').setDescription(`格式如：30:56:0F:09:39:2D`).setDefault('00:00:00:00:00:00'),
+      ip:BncrCreateSchema.string().setTitle('电脑固定IP').setDescription(`需要设置固定IP`).setDefault('192.168.1.11'),
+      mac:BncrCreateSchema.string().setTitle('电脑MAC地址：').setDescription(`格式如：30:56:0F:09:39:2D`).setDefault('00:00:00:00:00:00'),
   }).setTitle('设置').setDefault({}),
 
     // 说明
@@ -87,10 +87,10 @@ module.exports = async (s) => {
       port: 9
   }, (error) => {
       if (error) {
-        await s.reply('开机失败');
+        s.reply('开机失败');
         console.error('无法发送唤醒数据包:', error);
       } else {
-        await s.reply('请求开机成功，请等待完成开机~');
+        s.reply('请求开机成功，请等待完成开机~');
         console.log('唤醒数据包已发送！');  
       }
   });
