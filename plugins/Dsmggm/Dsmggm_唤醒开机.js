@@ -2,7 +2,7 @@
  * @author Dsmggm
  * @name Dsmggm_唤醒开机
  * @team Dsmggm
- * @version 1.0.0
+ * @version 1.0.1
  * @description 唤醒电脑开机，需要提前设置网口与BIOS，具体请自行百度查询设置方法
  * @rule ^(电脑开机|开机|唤醒电脑|开机电脑|打开电脑)$
  * @admin true
@@ -19,8 +19,10 @@ const describe_text =`
 1、设置电脑开机唤醒功能，需要设置BIOS与网口唤醒功能，具体请自行百度查询设置方法<br>
 2、需要电脑MAC与固定IP地址<br>
 3、仅管理员可使用<br>
-4、需要安装wake_on_lan依赖包，安装执行命令：npm i wake_on_lan<br>
+4、插件会自动安装wake_on_lan依赖包，如果没自动安装需要手动执行命令：npm i wake_on_lan<br>
 `;
+
+await sysMethod.testModule(['wake_on_lan'], { install: true }); //发现少模块自动安装
 
 const wol = require('wake_on_lan');
 
@@ -79,7 +81,6 @@ module.exports = async (s) => {
     logMessage('INFO', '插件未启用~');
     return 'next';  // 继续向下匹配插件
   }
-
 
   logMessage('INFO', '正在请求开机...');
   s.reply('正在请求开机...');
