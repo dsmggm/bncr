@@ -22,7 +22,7 @@ const describe_text =`
 4、插件会自动安装wake_on_lan依赖包，如果没自动安装需要手动执行命令：npm i wake_on_lan<br>
 `;
 
-await sysMethod.testModule(['wake_on_lan'], { install: true }); //发现少模块自动安装
+sysMethod.testModule(['wake_on_lan'], { install: true }); //发现少模块自动安装
 
 const wol = require('wake_on_lan');
 
