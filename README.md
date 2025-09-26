@@ -13,15 +13,14 @@
 2、可触发插件  
 #### 唤醒电脑
 1、用于远程开机的插件
+#### HomeAssistant控制
+1、对接HomeAssistant的语音助手
 # 订阅地址
 github
 <pre>
 https://github.com/dsmggm/bncr.git
 </pre>
-sub:暂未启用
-<pre>
-bncrSub://3BPeb/Ff4FlBAx372D99jSypngdaBgs9ww6Y8UwuGV/GhsJIXmNRFKrmSuDXYSDs7YcUlX16K9ecd44TJ62jNWv7ADd0aPZcc2coVc4BBSE=
-</pre>
+
 
 ## 请喝茶 ?
 如果你觉得作者很棒，你可以打赏他  
