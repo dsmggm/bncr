@@ -23,8 +23,8 @@ const describe_text =`
 3、配置本插件的IP与token<br>
 使用规则：<br>
 1、触发命令，ha或HA或Ha<br>
-1、使用示例：打开 {某区域} {某设备}   例：打开客厅风扇<br>
-2、如果不想带区域控制，可以到HomeAssistant侧边栏-设置-语音助手-公开-设置设备别名<br>
+2、使用示例：打开 {某区域} {某设备}   例：打开客厅风扇<br>
+3、如果不想带区域控制，可以到HomeAssistant侧边栏-设置-语音助手-公开-设置设备别名<br>
 `;
 
 const plugins_name = 'Dsmggm_测试';
