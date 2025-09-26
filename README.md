@@ -20,6 +20,13 @@
 五、 HomeAssistant控制  
 - 对接HomeAssistant的语音助手
 
+六、 插件自动更新
+- 可设置白名单或者黑名单
+- 可设置定时检查
+
+七、 人工客服
+- 人工客服呼叫留言插件
+
 # 订阅地址
 <pre>
 https://github.com/dsmggm/bncr.git
