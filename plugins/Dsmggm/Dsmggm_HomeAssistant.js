@@ -11,7 +11,7 @@
  * // 是否服务模块，true不会作为插件加载，会在系统启动时执行该插件内容
  * @service false
  * @classification ["工具"]
-*/
+ */
 
 
 
