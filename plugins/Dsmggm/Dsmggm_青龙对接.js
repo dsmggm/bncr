@@ -9,7 +9,7 @@
  * @admin false
  * @public false
  * @priority 3
- * @classification ["适配器"]
+ * @classification ["工具"]
  */
 
 
