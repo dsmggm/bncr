@@ -27,6 +27,9 @@
 七、 人工客服
 - 人工客服呼叫留言插件
 
+十、 jd账号绑定插件
+- 绑定与解绑jd账号
+
 # 订阅地址
 <pre>
 https://github.com/dsmggm/bncr.git
