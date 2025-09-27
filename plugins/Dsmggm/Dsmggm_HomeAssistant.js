@@ -27,8 +27,8 @@ const describe_text =`
 3、如果不想带区域控制，可以到HomeAssistant侧边栏-设置-语音助手-公开-设置设备别名，然后就可以使用“打开{别名}”的方式控制设备了<br>
 `;
 
-const plugins_name = 'Dsmggm_测试';
 
+const plugins_name = 'Dsmggm_HomeAssistant';
 const logger = {
   // 使用方法： logger.info('日志文本');
   // 其它级别自行写

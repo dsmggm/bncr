@@ -20,6 +20,7 @@ const describe_text =`
 `;
 
 // 日志函数
+const plugins_name = 'Dsmggm_jd绑定';
 const logger = {
   // 使用方法： logger.info('日志文本');
   // 其它级别自行写
