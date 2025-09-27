@@ -6,7 +6,7 @@
  * @description 京东账号绑定与解绑插件
  * @rule ^(jd绑定|绑定jd|jd删除|删除jd|jd解绑|解绑jd)$
  * @admin false
- * @public false
+ * @public true
  * @priority 99999
  * // 是否服务模块，true不会作为插件加载，会在系统启动时执行该插件内容
  * @service false
