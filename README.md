@@ -1,6 +1,6 @@
 # 插件列表
 一、 赞赏插件  
-- 仅适配对接gewechat  
+- 仅适配对接wechatFerry  
 - 其它说明懒得写，看插件吧  
 - 有异常请联系Bncr社区群[TG频道](https://t.me/BncrJS)  
 
