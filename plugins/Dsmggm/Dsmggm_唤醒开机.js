@@ -6,7 +6,7 @@
  * @description 唤醒电脑开机，需要提前设置网口与BIOS，具体请自行百度查询设置方法
  * @rule ^(电脑开机|开机|唤醒电脑|开机电脑|打开电脑)$
  * @admin true
- * @public false
+ * @public true
  * @priority 99999
  * // 是否服务模块，true不会作为插件加载，会在系统启动时执行该插件内容
  * @service false
