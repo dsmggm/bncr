@@ -294,9 +294,9 @@ class ql {
   // 初始化青龙实例，传入青龙别名
   static async init(Name = '') {
     const qldata = await qinglongDB.get(Name);
-    if (qldata === '没有这个青龙容器') {
-      logger.error('没有这个青龙容器')
-      return null;
+    if (qldata === undefined) {
+      logger.error(`没有${Name}这个青龙容器,请确认插件容器配置名`)
+      return false;
     }
     return new ql(qldata.Name, qldata.Host, qldata.ClientID, qldata.ClientSecret, qldata.token);
   }
