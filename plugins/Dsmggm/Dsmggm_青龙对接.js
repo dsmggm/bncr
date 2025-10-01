@@ -249,6 +249,27 @@ module.exports = async (sender) => {
   //   logger.error('获取日志失败');
   // }
 
+  // 获取定时任务列表
+  // 成功时返回定时任务列表，失败时返回false
+  // const getcrons = await qinglong.get_crons();
+  // if (getcrons) {
+  //   logger.info(`获取定时任务列表成功: `);
+  //   getcrons.data.forEach((cron, index) => {
+  //     logger.info(`  [${index+1}] ID: ${cron.id}, 名称: ${cron.name}, 命令: ${cron.command}, 状态: ${cron.status}, 备注: ${cron.remarks || '无'}`);
+  //   })
+  // } else {
+  //   logger.error('获取定时任务列表失败');
+  // }
+
+  // 定时任务操作
+  // 传入参数：cron_id    //任务ID
+  // const cron = await qinglong.run_crons(1);
+  // if (cron) {
+  //   logger.info(`运行定时任务成功: `);
+  // } else {
+  //   logger.error('运行定时任务失败');
+  // }
+
 
 }
 
@@ -653,6 +674,64 @@ class ql {
     }
     return false;
   }
+
+
+  // 获取定时任务列表
+  async get_crons() {
+    for (let i = 1; i < 4; i++) {
+      
+      /////////////////////////代码编辑区////////////////////////////////
+      try {
+        const response = await axios.get(this.Host + `/open/crons/`, 
+          {
+            headers: {
+              Authorization: 'Bearer ' + this.token,
+            },
+          }
+        );
+        return response.data;
+      } catch (error) {
+        logger.error(`第${i}次-ql获取定时任务列表失败: ` + error.message);
+      }
+      
+      //////////////////////////////////////////////////////////////////
+      
+      // 等待一段时间再重试（指数退避）
+      await sysMethod.sleep(5);
+      this.get_ql_token();  // 重新获取青龙token
+    }
+    return false;
+  }
+
+  // 运行任务
+  async run_crons(cron_id) {
+    for (let i = 1; i < 4; i++) {
+      
+      /////////////////////////代码编辑区////////////////////////////////
+      try {
+        const response = await axios.get(this.Host + `/open/crons/run`, 
+          [cron_id],
+          {
+            headers: {
+              Authorization: 'Bearer ' + this.token,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+        return response.data;
+      } catch (error) {
+        logger.error(`第${i}次-ql运行ID为${cron_id}的任务失败: ` + error.message);
+      }
+      
+      //////////////////////////////////////////////////////////////////
+      
+      // 等待一段时间再重试（指数退避）
+      await sysMethod.sleep(5);
+      this.get_ql_token();  // 重新获取青龙token
+    }
+    return false;
+  }
+
 }
 
 ////////////////////////////////////////////////////////////////////////////
