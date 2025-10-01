@@ -6,18 +6,34 @@
  * @description 青龙对接工具
  * @rule ^(qltest)$
  * @admin true
- * @public false
+ * @public true
  * @priority 3
  * @service false
  * @classification ["工具"]
+ * // 定时任务cron规则，默认1天，如需修改，请自行修改脚本
+ * @cron 1 1 1 1 * *
  */
 
 
 // 插件说明内容
 const describe_text =`
-1、配置青龙:<br>
-设置用于对接青龙<br>
+一、配置青龙:<br>
+设置用于对接多个青龙，青龙别名用于与其它插件对接<br>
 青龙开发参考api连接：https://qinglong-api.taozhiyu.tk/<br>
+<br>
+二、插件使用:<br>
+1、使用命令qltest测试青龙连接状态<br>
+2、插件支持以下功能：<br>
+获取青龙token、获取变量、添加变量、更新变量、禁用变量、启用变量、删除变量、获取脚本内容、运行自定义脚本、获取日志列表、获取指定日志内容<br>
+3、代码示例：<br>
+// 引入青龙对接插件<br>
+const {ql} = require('./Dsmggm_青龙对接.js')<br>
+// 获取青龙实例<br>
+const qinglong = await ql.init('jd1')<br>
+// 启用变量<br>
+await qinglong.enable_env(1260);<br>
+<br>
+其它代码示例看插件主要函数，均有示例参考<br>
 `;
 
 const axios = require('axios');
@@ -67,7 +83,7 @@ const jsonSchema = BncrCreateSchema.object({
       })
       ).setTitle('青龙设置').setDescription('可配置多个青龙').setDefault([{"Name": "京东容器1", "Host": "http://192.168.1.1:5700","ClientID": "w_z****FVc","ClientSecret": "qJw****-****Nrq"}
     ]),
-  }).setTitle('设置').setDefault({}),
+  }).setTitle('全局设置').setDefault({}),
   
   // 说明
   describe: BncrCreateSchema.object({}).setTitle('说明').setDescription(describe_text).setDefault({}),
@@ -94,11 +110,16 @@ module.exports = async (sender) => {
   }
 
   // 插件默认触发函数，测试并写入全部青龙token并保存
-  await for_all_qinglong();
+  const text = await for_all_qinglong();
+  sender.reply(`全部青龙连接状态:${text}`);
+
+  // 获取青龙实例
+  // const {ql} = require('./Dsmggm_青龙对接.js')
+  // const qinglong = await ql.init('容器名')
 
   // 获取token，可用于刷新青龙连接状态
   // 成功时返回token，失败时返回false
-  // if (await get_ql_token()) {
+  // if (await qinglong.get_ql_token()) {
   //   sender.reply('青龙连接正常');
   // } else {
   //   sender.reply('青龙连接失败');
@@ -106,7 +127,7 @@ module.exports = async (sender) => {
 
   // 获取青龙变量
   // 成功时返回环境变量数组，失败时返回false
-  // const envs = await get_envs();
+  // const envs = await qinglong.get_envs();
   // logger.info();
   // envs.forEach((env, index) => {
   //   logger.info(`  [${index+1}] 名称: ${env.name}, 值: ${env.value}, 备注: ${env.remarks || '无'}`);
@@ -116,7 +137,7 @@ module.exports = async (sender) => {
   // 传入参数：value, name, remarks
   // value为变量值，name为变量名，remarks(可选)为变量备注
   // 失败时返回false
-  // const addenv = await add_env('testvalue', 'testname', 'testremarks');
+  // const addenv = await qinglong.add_env('testvalue', 'testname', 'testremarks');
   // if (addenv) {
   //   logger.info(`添加变量成功: 名称: ${addenv[0].name}, 值: ${addenv[0].value}, 备注: ${addenv[0].remarks || '无'}`);
   // } else {
@@ -127,7 +148,7 @@ module.exports = async (sender) => {
   // 传入参数：id, value, name, remarks
   // 根据id更新某个变量，value为变量值，name为变量名，remarks(可选)为变量备注
   // 失败时返回false
-  // const updateenv = await update_env(1640, '11111', 'dasdasd', '3');
+  // const updateenv = await qinglong.update_env(1640, '11111', 'dasdasd', '3');
   // if (updateenv) {
   //   logger.info(`更新变量成功:`);
   // } else {
@@ -138,7 +159,7 @@ module.exports = async (sender) => {
   // 传入参数：id
   // 根据id禁用某个变量
   // 失败时返回false
-  // const disableenv = await disable_env(1640);
+  // const disableenv = await qinglong.disable_env(1640);
   // if (disableenv) {
   //   logger.info(`禁用变量成功:`);
   // } else {
@@ -149,7 +170,7 @@ module.exports = async (sender) => {
   // 传入参数：id
   // 根据id启用某个变量
   // 失败时返回false
-  // const enableenv = await enable_env(1640);
+  // const enableenv = await qinglong.enable_env(1640);
   // if (enableenv) {
   //   logger.info(`启用变量成功:`);
   // } else {
@@ -160,7 +181,7 @@ module.exports = async (sender) => {
   // 传入参数：id
   // 根据id删除某个变量
   // 失败时返回false
-  // const delenv = await del_env(1640);
+  // const delenv = await qinglong.del_env(1640);
   // if (delenv) {
   //   logger.info(`删除变量成功:`);
   // } else {
@@ -171,7 +192,7 @@ module.exports = async (sender) => {
   // 传入参数：filename
   // 传入filename脚本名称，path脚本路径
   // 成功返回脚本内容，失败时返回false
-  // const getscript = await get_script('test.py');
+  // const getscript = await qinglong.get_script('test.py');
   // if (getscript) {
   //   logger.info(`获取脚本内容成功:`);
   // } else {
@@ -183,7 +204,7 @@ module.exports = async (sender) => {
   // 传入filename脚本名称，content脚本内容(可选)
   // 失败时返回false
   // 示例1——直接运行获取的脚本：
-  // const runscript = await run_script('test.py', getscript.data);
+  // const runscript = await qinglong.run_script('test.py', getscript.data);
   // if (runscript) {
   //   logger.info(`运行脚本成功:`);
   // } else {
@@ -195,7 +216,7 @@ module.exports = async (sender) => {
 // print('test')
 // with open("timefile.txt", 'w', encoding='utf-8') as file:
 //     file.write(str(datetime.now()))`
-//   const runscript = await run_script('test.py', '', code);
+//   const runscript = await qinglong.run_script('test.py', '', code);
 //   if (runscript) {
 //     logger.info(`运行脚本成功:`);
 //   } else {
@@ -204,7 +225,7 @@ module.exports = async (sender) => {
 
   // 获取日志列表
   // 成功时返回日志列表，失败时返回false
-//   const getlogslist = await get_logs_list();
+//   const getlogslist = await qinglong.get_logs_list();
 //   if (getlogslist) {
 //     logger.info(`获取日志列表成功: `);
 // getlogslist.data.forEach((log, index) => {
@@ -219,9 +240,9 @@ module.exports = async (sender) => {
   // 传入file日志文件名称，path日志文件路径
   // 失败时返回false
   // 示例1——获取某文件夹下某日志文件内容：
-  // const getlog = await get_log('2025-09-28-21-28-00-204.log', '6dylan6_jdpro_jd_bean_change_665');
+  // const getlog = await qinglong.get_log('2025-09-28-21-28-00-204.log', '6dylan6_jdpro_jd_bean_change_665');
   // 示例2——获取日志根目录下某日志文件内容：
-  // const getlog = await get_log('6dylan6_jdpro_jd_bean_change_665/2025-09-28-21-28-00-204.log');
+  // const getlog = await qinglong.get_log('6dylan6_jdpro_jd_bean_change_665/2025-09-28-21-28-00-204.log');
   // if (getlog) {
   //   logger.info(`获取日志成功: ${getlog.data}`);
   // } else {
@@ -234,15 +255,26 @@ module.exports = async (sender) => {
 
 // 刷新全部青龙token并保存
 async function for_all_qinglong() {
+  // 删除青龙全部数据
+  const qldata = await qinglongDB.keys(); 
+  for (const delql of qldata) {
+    qinglongDB.del(`${delql}`);
+  }
+
+  // 获取全部青龙数据
+  let data = '';
   for (const qldata of ConfigDB.userConfig.seting.qlseting) {
     // 获取token
     const qinglong = new ql(qldata.Name, qldata.Host, qldata.ClientID, qldata.ClientSecret);
     const token = await qinglong.get_ql_token();
+    data += `\n${qldata.Name}: ✅连接成功`;
     if (!token) {
       logger.error(`青龙${qldata.Name}连接失败，跳过保存`);
+      data += `\n${qldata.Name}: ❌连接失败`;
       return;
     }
   }
+  return data;
 } 
 
 /////////////////////↓↓↓↓↓↓↓↓↓青龙请求函数↓↓↓↓↓↓↓↓↓↓//////////////////////////////
@@ -250,20 +282,23 @@ async function for_all_qinglong() {
 
 
 class ql { 
-  constructor(Name = '', Host = '', ClientID = '', ClientSecret = '') {
+  // 构造函数
+  constructor(Name = '', Host = '', ClientID = '', ClientSecret = '', token = '') {
     this.Name = Name;
     this.Host = Host;
     this.ClientID = ClientID;
     this.ClientSecret = ClientSecret;
-    this.token = '';
-    // 这里还需要写只传入Name的时候，从数据库读取其它参数的功能
-    if (Host === '') {
-      const abc = qinglongDB.get(Name);
-      this.Host = abc.Host;
-      this.ClientID = abc.ClientID;
-      this.ClientSecret = abc.ClientSecret;
-      this.token = abc.token;
+    this.token = token;
+  }
+
+  // 初始化青龙实例，传入青龙别名
+  static async init(Name = '') {
+    const qldata = await qinglongDB.get(Name);
+    if (qldata === '没有这个青龙容器') {
+      logger.error('没有这个青龙容器')
+      return null;
     }
+    return new ql(qldata.Name, qldata.Host, qldata.ClientID, qldata.ClientSecret, qldata.token);
   }
 
   
@@ -288,6 +323,7 @@ class ql {
           'ClientSecret': this.ClientSecret,
           'token': response.data.data.token 
         });
+        this.token = response.data.data.token;
         return response.data.data.token;
         
       } catch (error) {
