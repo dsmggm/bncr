@@ -175,5 +175,27 @@
     "isEncPlugin": false,
     "id": "4A/zSYTH8s4oljVqVsIsdRpCOHI=",
     "isChatPlugin": true
+  },
+  "XGiQT+4tugh6kSvCvw0hoeTM49w=": {
+    "type": "github",
+    "name": "Dsmggm_青龙对接",
+    "author": "Dsmggm",
+    "team": "Dsmggm",
+    "version": "1.0.0",
+    "description": "青龙对接工具",
+    "classification": [
+      "工具"
+    ],
+    "filename": "Dsmggm_青龙对接.js",
+    "fileDir": "/plugins/Dsmggm/Dsmggm_青龙对接.js",
+    "systemVersionRange": "",
+    "isCron": false,
+    "isAdapter": false,
+    "isMod": false,
+    "isService": false,
+    "isAuthentication": false,
+    "isEncPlugin": false,
+    "id": "XGiQT+4tugh6kSvCvw0hoeTM49w=",
+    "isChatPlugin": true
   }
 }
