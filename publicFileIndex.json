@@ -22,6 +22,28 @@
     "id": "ABgSyIg57Vqc3SCuoG3Ogn8UqJ4=",
     "isChatPlugin": true
   },
+  "/f6DIUS9DYc36fbV2BNYKBcMLmc=": {
+    "type": "github",
+    "name": "Dsmggm_jdck登录",
+    "author": "Dsmggm",
+    "team": "Dsmggm",
+    "version": "1.0.0",
+    "description": "https://github.com/dsmggm/svjdck jd账密登录插件",
+    "classification": [
+      "工具"
+    ],
+    "filename": "Dsmggm_jdck登录.js",
+    "fileDir": "/plugins/Dsmggm/Dsmggm_jdck登录.js",
+    "systemVersionRange": "",
+    "isCron": false,
+    "isAdapter": false,
+    "isMod": false,
+    "isService": false,
+    "isAuthentication": false,
+    "isEncPlugin": false,
+    "id": "/f6DIUS9DYc36fbV2BNYKBcMLmc=",
+    "isChatPlugin": true
+  },
   "zIBK788H4TY/AwiUwdG34Xx2Y6k=": {
     "type": "github",
     "name": "Dsmggm_jd绑定",
