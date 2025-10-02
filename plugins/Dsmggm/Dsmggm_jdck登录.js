@@ -266,7 +266,7 @@ module.exports = async (sender) => {
   }
 
   const isgroup = await sender.getGroupId()
-  if (isgroup) {
+  if (isgroup !== "0") {
     return sender.reply('请私聊我进行登录');
   }
 
