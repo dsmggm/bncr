@@ -6,7 +6,7 @@
  * @description 智能家居HomeAssistant对话插件
  * @rule ^(HA|ha|Ha)$
  * @admin true
- * @public true
+ * @public false
  * @priority 99999
  * // 是否服务模块，true不会作为插件加载，会在系统启动时执行该插件内容
  * @service false

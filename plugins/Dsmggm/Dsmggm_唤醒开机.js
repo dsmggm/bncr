@@ -6,7 +6,7 @@
  * @description 唤醒电脑开机，需要提前设置网口与BIOS，具体请自行百度查询设置方法
  * @rule ^(电脑开机|开机|唤醒电脑|开机电脑|打开电脑)$
  * @admin true
- * @public true
+ * @public false
  * @priority 99999
  * // 是否服务模块，true不会作为插件加载，会在系统启动时执行该插件内容
  * @service false
@@ -63,7 +63,7 @@ const logger = {
 // 构建插件配置
 const jsonSchema = BncrCreateSchema.object({
     // 开关
-    seting: BncrCreateSchema.object({
+    settings: BncrCreateSchema.object({
       enable: BncrCreateSchema.boolean().setTitle('插件开关').setDescription(`设置为关则插件不启用`).setDefault(false),
       ip:BncrCreateSchema.string().setTitle('电脑固定IP').setDescription(`需要设置固定IP`).setDefault('192.168.1.11'),
       mac:BncrCreateSchema.string().setTitle('电脑MAC地址：').setDescription(`格式如：3B:A6:0F:09:49:2D或者3B-A6-0F-09-49-2D`).setDefault('00:00:00:00:00:00'),
@@ -84,15 +84,15 @@ module.exports = async (s) => {
     return 'next';  // 继续向下匹配插件
   }
   // 开关判断
-  if (ConfigDB.userConfig.seting.enable == false) {
+  if (ConfigDB.userConfig.settings.enable == false) {
     logger.info('插件未启用~');
     return 'next';  // 继续向下匹配插件
   }
 
   logger.info('正在请求开机...');
   s.reply('正在请求开机...');
-  wol.wake(ConfigDB.userConfig.seting.mac, {
-      address: ConfigDB.userConfig.seting.ip,
+  wol.wake(ConfigDB.userConfig.settings.mac, {
+      address: ConfigDB.userConfig.settings.ip,
       port: 9,
       // num_packets: 300,
       interval: 1000
@@ -112,13 +112,13 @@ module.exports = async (s) => {
 
   // 配置 ping 检测
   const options = {
-      address: ConfigDB.userConfig.seting.ip, // 目标 IP 地址
+      address: ConfigDB.userConfig.settings.ip, // 目标 IP 地址
       timeout: 2000, // 超时时间（毫秒）
       retries: 30,    // 重试次数
   };
 
   // 发送 ping 请求并处理结果
-  let res = await ping.promise.probe(ConfigDB.userConfig.seting.ip, {
+  let res = await ping.promise.probe(ConfigDB.userConfig.settings.ip, {
    timeout: 60,
   });
   if (res.alive) {

@@ -3,11 +3,11 @@
  * @name Dsmggm_交互式菜单
  * @team Dsmggm
  * @version 1.0.3
- * @description 交互式菜单，可以设置是否触发插件，目前仅测试了Gewechat与wechatFerry。用了都说妙~
+ * @description 交互式菜单，可以设置是否触发插件，目前仅测试了Gewechat。用了都说妙~
  * @rule ^(菜单)$
  * @rule ^(帮助)$
  * @admin false
- * @public true
+ * @public false
  * @priority 99999
  * // 是否服务模块，true不会作为插件加载，会在系统启动时执行该插件内容
  * @service false

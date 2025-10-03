@@ -72,9 +72,9 @@ const logger = {
 // 构建插件配置
 const jsonSchema = BncrCreateSchema.object({
   // 开关
-  seting: BncrCreateSchema.object({
+  settings: BncrCreateSchema.object({
     enable: BncrCreateSchema.boolean().setTitle('插件开关').setDescription(`设置为关则插件不启用`).setDefault(false),
-    qlseting: BncrCreateSchema.array(
+    qlsettings: BncrCreateSchema.array(
       BncrCreateSchema.object({
         Name: BncrCreateSchema.string().setTitle('容器名称').setDescription(`自定义容器名，便于插件调用或者备注识别使用`),
         Host: BncrCreateSchema.string().setTitle('青龙访问IP与端口').setDescription(`例如http://192.168.10.10:5700`),
@@ -104,7 +104,7 @@ module.exports = async (sender) => {
     return 'next';  // 继续向下匹配插件
   }
   // 开关判断
-  if (ConfigDB.userConfig.seting.enable == false) {
+  if (ConfigDB.userConfig.settings.enable == false) {
     logger.info('插件未启用~');
     return 'next';  // 继续向下匹配插件
   }
@@ -284,7 +284,7 @@ async function for_all_qinglong() {
 
   // 获取全部青龙数据
   let data = '';
-  for (const qldata of ConfigDB.userConfig.seting.qlseting) {
+  for (const qldata of ConfigDB.userConfig.settings.qlsettings) {
     // 获取token
     const qinglong = new ql(qldata.Name, qldata.Host, qldata.ClientID, qldata.ClientSecret);
     const token = await qinglong.get_ql_token();

@@ -4,11 +4,9 @@
  * @team Dsmggm
  * @version 1.0.8
  * @description 请求赞赏，记录用户ID与赞赏内容到无界数据库，便于其它插件读取赞赏数据。用了都说妙~
- * @rule ^(赞赏)$
- * @rule ^(赞赏码)$
- * @rule ^(打款)$
+ * @rule ^(赞赏|赞赏码|打款)$
  * @admin false
- * @public true
+ * @public false
  * @priority 99999
  * // 是否服务模块，true不会作为插件加载，会在系统启动时执行该插件内容
  * @service false
@@ -44,7 +42,7 @@ const logMessage = (level, message) => {
   // console.log(`[${timestamp}] [${level}] Dsmggm_监测赞赏码信息 - ${message}`);
   
   // 根据 level 选择合适的 console 方法
-  switch (level) {
+  settings (level) {
     case 'ERROR':
       console.error(`[${timestamp}] [${level}] Dsmggm_赞赏信息 - ${message}`);
       break;
@@ -67,7 +65,7 @@ const logMessage = (level, message) => {
 // 构建插件配置
 const jsonSchema = BncrCreateSchema.object({
     // 开关
-    switch: BncrCreateSchema.object({
+    settings: BncrCreateSchema.object({
       enable: BncrCreateSchema.boolean().setTitle('插件开关').setDescription(`设置为关则插件不启用`).setDefault(false),
       image:BncrCreateSchema.string().setTitle('打赏二维码图片URL：').setDescription(`返回给用户的打赏码，需要与机器人bot同一微信(目前只支持gwwechat)`).setDefault('http://无界IP:9090/public/zsm.jpg')
   }).setTitle('设置').setDefault({}),
@@ -185,13 +183,13 @@ module.exports = async (s) => {
       return 'next';  // 继续向下匹配插件
     }
     // 开关判断
-    if (ConfigDB.userConfig.switch.enable == false) {
+    if (ConfigDB.userConfig.settings.enable == false) {
       logMessage('INFO', '插件未启用~');
       return 'next';  // 继续向下匹配插件
     }
     
     // 发赞赏码
-    const image = ConfigDB.userConfig.switch.image;
+    const image = ConfigDB.userConfig.settings.image;
     await s.reply({
         type: 'image',
         path: image

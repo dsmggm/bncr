@@ -52,7 +52,7 @@ const axios = require('axios');
 // 构建插件配置
 const jsonSchema = BncrCreateSchema.object({
     // 开关
-    switch: BncrCreateSchema.object({
+    settings: BncrCreateSchema.object({
       enable: BncrCreateSchema.boolean().setTitle('插件开关').setDescription(`设置为关则插件不启用`).setDefault(false),
       ip:BncrCreateSchema.string().setTitle('svjdck容器IP').setDescription(`svjdck的容器ip，包括port端口，例如http://192.168.1.100:4321 。注意：如果是https协议请加s`)
   }).setTitle('设置').setDefault({}),
@@ -88,7 +88,7 @@ class jdlogin{
     this.username = phone;
     // 发送验证码
     try {
-      const response = await axios.post(ConfigDB.userConfig.switch.ip + '/sendcode', 
+      const response = await axios.post(ConfigDB.userConfig.settings.ip + '/sendcode', 
         {
           "username": phone,
         },
@@ -121,7 +121,7 @@ class jdlogin{
   async verifycode(code) {
     // 发送验证码
     try {
-      const response = await axios.post(ConfigDB.userConfig.switch.ip + '/verifycode', 
+      const response = await axios.post(ConfigDB.userConfig.settings.ip + '/verifycode', 
         {
           "username": this.username,
           "code": code,
@@ -165,7 +165,7 @@ class jdlogin{
       logger.info(`password类型: ${typeof this.password}, 值: ${this.password}`);
       logger.info(`remarks类型: ${typeof this.remarks}, 值: ${this.remarks}`);
       logger.info(`uid类型: ${typeof this.uid}, 值: ${this.uid}`);
-      const response = await axios.post(ConfigDB.userConfig.switch.ip + '/submit_user_info', 
+      const response = await axios.post(ConfigDB.userConfig.settings.ip + '/submit_user_info', 
         {
           "username": this.username,
           "remark": this.remarks,
@@ -201,7 +201,7 @@ class jdlogin{
   async wxpusher_qrcode() {
     // 获取扫码图片
     try {
-      const response = await axios.post(ConfigDB.userConfig.switch.ip + '/wxpusher_qrcode', 
+      const response = await axios.post(ConfigDB.userConfig.settings.ip + '/wxpusher_qrcode', 
         {
           "username": this.username
         },
@@ -281,12 +281,12 @@ module.exports = async (sender) => {
     return 'next';  // 继续向下匹配插件
   }
   // 开关判断
-  if (ConfigDB.userConfig.switch.enable == false) {
+  if (ConfigDB.userConfig.settings.enable == false) {
     logger.info('插件未启用~');
     return 'next';  // 继续向下匹配插件
   }
   // 判断svjdck容器IP是否存在
-  if (!ConfigDB.userConfig.switch.ip) {
+  if (!ConfigDB.userConfig.settings.ip) {
     logger.info('svjdck容器IP未设置，请在插件配置中设置');
     return 'next';  // 继续向下匹配插件
   }
@@ -410,11 +410,11 @@ module.exports = async (sender) => {
   
   // 扫码提交uid
   const uid_qrcode = await login.wxpusher_qrcode();
-  await sender.relp('扫码关注WxPusher，接受推送消息(可忽略)')
+  await sender.reply('扫码关注WxPusher，接受推送消息(可忽略)')
   if (uid_qrcode.msg === '处理成功') {
     await sender.reply({
       type: 'image', // video
-      msg: '扫码关注WxPusher，接受推送消息(此信息可忽略)',
+      msg: '',
       path: uid_qrcode.data.shortUrl,
     });
     return;

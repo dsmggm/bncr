@@ -52,7 +52,7 @@ const logger = {
 // 构建插件配置
 const jsonSchema = BncrCreateSchema.object({
   // 开关
-  seting: BncrCreateSchema.object({
+  settings: BncrCreateSchema.object({
     enable: BncrCreateSchema.boolean().setTitle('插件开关').setDescription(`设置为关则插件不启用`).setDefault(false),
     container: BncrCreateSchema.string().setTitle('存放容器').setDescription(`变量存储环境的容器名`),
   }).setTitle('全局设置').setDefault({}),
@@ -74,7 +74,7 @@ module.exports = async (sender) => {
     return 'next';  // 继续向下匹配插件
   }
   // 开关判断
-  if (ConfigDB.userConfig.seting.enable == false) {
+  if (ConfigDB.userConfig.settings.enable == false) {
     logger.info('插件未启用~');
     return 'next';  // 继续向下匹配插件
   }
@@ -120,9 +120,10 @@ module.exports = async (sender) => {
   if (remarks === null) return sender.reply('超时自动退出');
   if (remarks.getMsg() === 'q') return sender.reply('已退出');
   
-  // 初始化青龙
+  // 初始化青龙实例
   const {ql} = require('./Dsmggm_青龙对接.js')
-  const qinglong = await ql.init(ConfigDB.userConfig.seting.container)
+  const qinglong = await ql.init(ConfigDB.userConfig.settings.container)
+  // 提交变量
   await qinglong.add_env(vlaue.getMsg(), name.getMsg(), remarks.getMsg() + '@@' + sender.getUserId());
 
   sender.reply(`变量提交成功`);

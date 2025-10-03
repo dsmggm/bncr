@@ -1,426 +1,337 @@
 /**
  * @author Dsmggm
- * @name Dsmggm_jdck登录
+ * @name Dsmggm_插件更新
  * @team Dsmggm
- * @version 1.0.1
- * @description https://github.com/dsmggm/svjdck jd账密登录插件
- * @rule ^(jd登录|jd登陆|登陆|登录|登录jd|登陆jd|jd)$
- * @admin false
- * @public true
+ * @version 1.0.2
+ * @description 插件更新插件，支持黑名单，白名单，全部更新模式。
+ * @rule ^(插件更新)$
+ * @rule ^(更新插件)$
+ * @admin true
+ * @public false
  * @priority 99999
  * // 是否服务模块，true不会作为插件加载，会在系统启动时执行该插件内容
  * @service false
  * @classification ["工具"]
+ * // 定时任务cron规则，默认1天，如需修改，请自行修改脚本
+ * @cron 1 1 1 1 * *
  */
 
+const { log } = require('console');
+
 // 插件说明内容
-const describe_text =`
-1、暂无说明:<br>
-设置svjdck对接
+const describe_text = `
+无需填写无界ip与账号密码，即可使用更新插件功能。<br>
+<br>
+1. 更新命令“插件更新”或“更新插件”。 <br>
+2. 更新模式有三种，分别为："全部更新"，"黑名单"，"白名单"三种模式。 <br>
+3. 可设置定时运行，使用cron时间规则，不懂默认即可，默认1天更新一次。 <br>
+4. 插件更新后，可选重启无界。 <br>
 `;
+
 // 日志函数
-const plugins_name = 'Dsmggm_jdck登录';
-const logger = {
-  // 使用方法： logger.info('日志文本');
-  // 其它级别自行写
+const logMessage = (level, message) => {
+  const timestamp = sysMethod.getTime('yyyy-MM-dd hh:mm:ss');
   
-  // 获取格式化的当前时间
-  getFormattedTime() {
-    const date = new Date(Date.now() + 8 * 60 * 60 * 1000);
-    // 格式化为 YYYY-MM-DDTHH:mm:ss.sss 格式
-    return date.toISOString().slice(0, -1);
-  },
-  
-  // INFO级日志
-  info(message = '') {
-    console.log(`\x1b[32m[${this.getFormattedTime()}] [INFO] ${plugins_name} - ${message}\x1b[0m`);
-  },
-  
-  // WARE级日志
-  ware(message = '') {
-    console.log(`\x1b[33m[${this.getFormattedTime()}] [WARE] ${plugins_name} - ${message}\x1b[0m`);
-  },
-
-  // ERROR级日志
-  error(message = '') {
-    console.error(`\x1b[31m[${this.getFormattedTime()}] [ERROR] ${plugins_name} - ${message}\x1b[0m`);
-  },
+  // 根据 level 选择合适的 console 方法
+  switch (level) {
+    case 'ERROR':
+      console.error(`[${timestamp}] [${level}] Dsmggm_插件更新 - ${message}`);
+      break;
+    case 'WARN':
+      console.warn(`[${timestamp}] [${level}] Dsmggm_插件更新 - ${message}`);
+      break;
+    case 'INFO':
+      console.info(`[${timestamp}] [${level}] Dsmggm_插件更新 - ${message}`);
+      break;
+    case 'DEBUG':
+      console.debug(`[${timestamp}] [${level}] Dsmggm_插件更新 - ${message}`);
+      break;
+    default:
+      console.log(`[${timestamp}] [${level}] Dsmggm_插件更新 - ${message}`);
+      break;
+  }
 };
-
-const axios = require('axios');
 
 // 构建插件配置
 const jsonSchema = BncrCreateSchema.object({
-    // 开关
-    switch: BncrCreateSchema.object({
-      enable: BncrCreateSchema.boolean().setTitle('插件开关').setDescription(`设置为关则插件不启用`).setDefault(false),
-      ip:BncrCreateSchema.string().setTitle('svjdck容器IP').setDescription(`svjdck的容器ip，包括port端口，例如http://192.168.1.100:4321 。注意：如果是https协议请加s`)
-  }).setTitle('设置').setDefault({}),
+  // 开关
+  enable: BncrCreateSchema.boolean().setTitle('插件开关').setDescription(`设置为关则插件不启用`).setDefault(false),
+  
+  // 重启按钮
+  reboot: BncrCreateSchema.boolean().setTitle('重启开关').setDescription(`更新插件后是否自动重启`).setDefault(false),
+  
+  // cron定时
+  cron: BncrCreateSchema.string().setTitle('定时运行设置').setDescription(`遵循cron定时规则（秒 分 时 天 月 周），如（1 1 1 1 * *），默认1天运行一次`).setDefault('1 1 1 1 * *'),
 
-    // 说明
-    describe: BncrCreateSchema.object({}).setTitle('说明').setDescription(describe_text).setDefault({})
-  })
+  // 模式
+  Select: BncrCreateSchema.string().setTitle('模式').setDescription('选择更新插件的方式，黑名单，白名单，全部更新').setEnum(['全部更新', '黑名单', '白名单']),
+  
+  // 名单列表
+  rooms: BncrCreateSchema.array(BncrCreateSchema.string().setTitle('').setDefault('')).setTitle('名单列表').setDescription('设置白名单或黑名单列表，如：qq.js ，只有在黑名单模式跟白名单模式有效'),
+
+  // 说明
+  describe: BncrCreateSchema.object({}).setTitle('说明').setDescription(describe_text).setDefault({})
+});
 /* 完成后new BncrPluginConfig传递该jsonSchema */
 const ConfigDB = new BncrPluginConfig(jsonSchema);
 
 
+// 第一步：登录并获取token
+async function login(username, password) {
+  const response = await fetch(`http://127.0.0.1:9090/webApi/login`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ userName: username, password: password })
+  });
+  const data = await response.json();
+  return data.data.token;
+}
 
-
-
-
-
-
-
-
-
-
-
-// 京东登录类
-class jdlogin{
-  constructor() {
-    this.username = '';
-    this.password = '';
-    this.remarks = '';
-    this.uid = '';
-  }
-
-  async sendcode(phone) { 
-    this.username = phone;
-    // 发送验证码
-    try {
-      const response = await axios.post(ConfigDB.userConfig.switch.ip + '/sendcode', 
-        {
-          "username": phone,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          httpsAgent: new (require('https')).Agent({
-            rejectUnauthorized: false
-          })
-        }
-      );
-      if (response.status === 200) {
-        return response.data;
+// 第二步：获取子URL数组
+async function getSubUrlArray(token) {
+  try {
+    const response = await fetch(`http://127.0.0.1:9090/webApi/getSubUrlArray`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
       }
-    } catch (error) {
-      logger.error(`${this.username}发送验证码失败: ` + error.message);
-      
-      // 如果有响应数据，返回服务器的错误信息
-      if (error.response && error.response.data) {
-        return error.response.data;
-      } else {
-        // 如果没有响应数据，返回通用错误信息
-        logger.error(`发送验证码失败，请联系管理员` + error.message);
-        return {msg: '发送验证码失败，请联系管理员'};
-      }
+    });
+
+    if (!response.ok) {
+      throw new Error('获取子URL数组请求失败');
     }
-  }
 
-  async verifycode(code) {
-    // 发送验证码
-    try {
-      const response = await axios.post(ConfigDB.userConfig.switch.ip + '/verifycode', 
-        {
-          "username": this.username,
-          "code": code,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          httpsAgent: new (require('https')).Agent({
-            rejectUnauthorized: false
-          })
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    logMessage('error', `获取子URL数组失败: ${error}`);
+    throw error;
+  }
+}
+
+// 第三步：获取子URL数据
+async function getSubUrlData(token, subArray) {
+  try {
+    const response = await fetch(`http://127.0.0.1:9090/webApi/getSubUrlData`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ subArray })
+    });
+
+    if (!response.ok) {
+      throw new Error('获取子URL数据请求失败');
+    }
+
+    const data = await response.json();
+
+    return data.data;
+  } catch (error) {
+    logMessage('error', `获取子URL数据失败: ${error}`);
+    throw error;
+  }
+}
+
+// 第四步：返回筛选后的列表
+function filterInstalledPlugins(pluginsData) {
+  let installedPlugins = [];
+
+  // 筛选出isInstall为true的插件信息
+  for (const data of pluginsData) {
+    if (data.pluginsList) {
+      // 遍历每个插件列表
+      for (const plugin of data.pluginsList) {
+        if (plugin.isUpdate) {
+          plugin.remarks = data.remarks;
+          plugin.subUrl = data.subUrl;
+          installedPlugins.push(plugin);
         }
-      );
-      this.password = response.data.password;
-      this.remarks = response.data.remarks;
-      this.uid = response.data.uid;
-      return response.data;
-    } catch (error) {
-      logger.error(`${this.username}提交验证码: ` + error.message);
-      
-      // 如果有响应数据，返回服务器的错误信息
-      if (error.response && error.response.data) {
-        return error.response.data;
-      } else {
-        // 如果没有响应数据，返回通用错误信息
-        return {msg: '提交验证码出错，请联系管理员'};
       }
     }
   }
-  
-  async submit_user_info(password = '', remarks = '') {
-    if (password !== '') {
-      this.password = password;
-    }
-    if (remarks !== '') {
-      this.remarks = remarks;
-    }
-    // 提交用户信息
-    try {
-      logger.info(`username类型: ${typeof this.username}, 值: ${this.username}`);
-      logger.info(`password类型: ${typeof this.password}, 值: ${this.password}`);
-      logger.info(`remarks类型: ${typeof this.remarks}, 值: ${this.remarks}`);
-      logger.info(`uid类型: ${typeof this.uid}, 值: ${this.uid}`);
-      const response = await axios.post(ConfigDB.userConfig.switch.ip + '/submit_user_info', 
-        {
-          "username": this.username,
-          "remark": this.remarks,
-          "password": this.password,
-          "uid": this.uid,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          httpsAgent: new (require('https')).Agent({
-            rejectUnauthorized: false
-          })
-        }
-      );
-      if (response.status === 200) {
-        return response.data;
-      }
-    } catch (error) {
-      
-      // 如果有响应数据，返回服务器的错误信息
-      if (error.response && error.response.data) {
-        logger.error(`${this.username}提交用户信息失败: ` + error.message);
-        return error.response.data;
-      } else {
-        // 如果没有响应数据，返回通用错误信息
-        logger.error(`提交用户信息出错，请联系管理员` + error.message);
-        return {msg: '提交用户信息出错，请联系管理员'};
-      }
-    }
-  }
+  return installedPlugins;
+}
 
-  async wxpusher_qrcode() {
-    // 获取扫码图片
+// 第五步：安装插件
+async function installPlugins(token, plugins, s) {
+  for (const plugin of plugins) {
     try {
-      const response = await axios.post(ConfigDB.userConfig.switch.ip + '/wxpusher_qrcode', 
-        {
-          "username": this.username
+      // 获取插件内容
+      const contentResponse = await fetch(`http://127.0.0.1:9090/webApi/getSubUrlPluginsContent`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         },
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          httpsAgent: new (require('https')).Agent({
-            rejectUnauthorized: false
-          })
-        }
-      );
-      return response.data;
-    } catch (error) {
-      logger.error(`${this.username}请求uid出错: ` + error.message);
-      
-      // 如果有响应数据，返回服务器的错误信息
-      if (error.response && error.response.data) {
-        return error.response.data;
-      } else {
-        // 如果没有响应数据，返回通用错误信息
-        logger.error(`${this.username}登录失败: 请求uid出错，请联系管理员` + error.message);
-        return {msg: '请求uid出错，请联系管理员'};
+        body: JSON.stringify({ type: plugin.type, remarks: plugin.remarks, subUrl: plugin.subUrl, id: plugin.id })
+      });
+
+      if (!contentResponse.ok) {
+        throw new Error(`获取插件内容 ${plugin.filename} 失败`);
       }
+
+      const contentData = await contentResponse.json();
+      // 安装插件
+      const installResponse = await fetch(`http://127.0.0.1:9090/webApi/savePluginsContent`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          content: contentData.data,
+          noBncrDataPath: plugin.fileDir,
+          errMsg: `安装插件 ${plugin.filename} 失败!`,
+          okMsg: `安装插件 ${plugin.filename} 成功!`
+        })
+      });
+
+      if (installResponse.ok) {
+        s.reply(`插件 ${plugin.filename} 安装成功`);
+      }
+
+
+      if (!installResponse.ok) {
+        throw new Error(`安装插件 ${plugin.filename} 失败`);
+      }
+
+    } catch (error) {
+      logMessage('error', `处理插件 ${plugin.filename} 失败, ${error}`);
     }
   }
 }
 
+// 匹配更新模式
+function selectplugins(installedPlugins) {
+  // 获取模式配置
+  const mode = ConfigDB.userConfig.Select;
 
+  // 全部更新
+  if (mode === '全部更新') {
+    return installedPlugins;
+  }
 
+  // 获取名单列表
+  const rooms = ConfigDB.userConfig.rooms;
+  // 筛选出符合名单列表的插件
 
+  // 黑名单
+  if (mode === '黑名单') {
+    const filteredPlugins = installedPlugins.filter(plugin => !rooms.includes(plugin.filename));
+    return filteredPlugins;
+  }
 
-async function bind_pin(sender, pin) {
-  const pinDB = new BncrDB('pinDB');   // pin数据库
-  uid = sender.getUserId(); // 获取消息 id
-  username = sender.getUserName();  // 获取获取用户名
-  from = sender.getFrom();  // 获取来自什么平台
-  
-  // 读取现有数据
-  let existing_data = await pinDB.get(`${from}:${uid}`);
-  
-  if (existing_data && Array.isArray(existing_data.Pin)) {
-    // 如果已有数据且Pin是数组，则添加新的pin（避免重复）
-    if (!existing_data.Pin.includes(pin)) {
-      existing_data.Pin.push(pin);
-    }
+  // 白名单
+  if (mode === '白名单') {
+    const filteredPlugins = installedPlugins.filter(plugin => rooms.includes(plugin.filename));
+    return filteredPlugins;
+  }
+}
+
+// 定时任务函数
+async function cron_task(crontime) {
+  // 判断是不是cron
+  const cron_y_n = await sysMethod.cron.isCron(crontime);
+  if (cron_y_n) {
+    // 获取当前模块文件的绝对路径
+    const filePath = module.filename;
+    // 读取文件内容
+    const fs = require('fs');
+    fs.readFile(filePath, 'utf8', (err, data) => {
+      if (err) {
+        logMessage('error', `读取文件失败: ${err}`);
+        return;
+      }
+
+      // 原始字符串数据
+      let fileContent = data.toString();
+
+      // 匹配规则
+      const regex = /^\s*\*\s*@cron\s+.*/mg;
+
+      // 提取文件的定时规则
+      const currentCronMatch = regex.exec(fileContent);
+
+      // 设置的定时任务规则
+      const crontime_set = ` * @cron ${crontime}`
+
+      // 替换文本
+      if (currentCronMatch) {
+        fileContent = fileContent.replace(regex, crontime_set);
+      }
+
+      // 写回文件
+      fs.writeFile(filePath, fileContent, 'utf8', (err) => {
+        if (err) {
+          logMessage('error', `写入文件失败: ${err}`);
+          return;
+        }
+        logMessage('info', '更新定时任务成功');
+      });
+    });
   } else {
-    // 如果没有现有数据或数据格式不正确，创建新数据结构
-    existing_data = {
-      'Pin': [pin],
-      'From': from,
-      'ID': uid,
-      'Name': username
-    };
+    logMessage('error', '定时参数设置错误，请检查插件配置');
+    return;
   }
-  
-  // 保存更新后的数据
-  await pinDB.set(`${from}:${uid}`, existing_data); // 成功 true 失败false
 }
 
-
-
-
-
-
-
-
-
-
-
-// 主函数
-module.exports = async (sender) => {
+module.exports = async (s) => {
   await ConfigDB.get();
+  
   // 初始化保存判断
-  if(!Object.keys(ConfigDB.userConfig).length){
-    logger.info('插件未启用~');
+  if (!Object.keys(ConfigDB.userConfig).length) {
+    logMessage('INFO', '插件未启用~');
     return 'next';  // 继续向下匹配插件
   }
   // 开关判断
-  if (ConfigDB.userConfig.switch.enable == false) {
-    logger.info('插件未启用~');
-    return 'next';  // 继续向下匹配插件
-  }
-  // 判断svjdck容器IP是否存在
-  if (!ConfigDB.userConfig.switch.ip) {
-    logger.info('svjdck容器IP未设置，请在插件配置中设置');
-    return 'next';  // 继续向下匹配插件
+  if (ConfigDB.userConfig.enable == false) {
+    logMessage('INFO', '插件未启用~');
+    return 'next';
   }
 
-  const isgroup = await sender.getGroupId()
-  if (isgroup !== "0") {
-    return sender.reply('请私聊我进行登录');
-  }
-
-  // 请输入登录账号
-  await sender.reply('请输入jd手机号，q退出');
-  let phone = await sender.waitInput(async (s)=> {
-    // sender.reply('请输入登录账号，q退出');
-    
-    let msg = s.getMsg();
-    if (msg === 'q') {
-      return 'q';                   //等价
-      // 判断是不是11位手机号
-    } else if (!(/^1\d{10}$/.test(msg))) {
-      await sender.reply('请输入正确的手机号');
-      return 'again';
-    }
-  }, 120);
-  if (phone === null) return sender.reply('超时自动退出');
-  if (phone.getMsg() === 'q') return sender.reply('已退出');
+  // 更新主函数
+  try {
+    await s.reply('开始更新');
+    // 登录
+    const systemdb = new BncrDB('system');
+    const username = await systemdb.get('name');
+    const password = await systemdb.get('password');
+    const token = await login(username, password);
   
-  const login = new jdlogin();
-  // 正在发送验证码
-  await sender.reply('正在发送验证码...');
-  const sendcode_status = await login.sendcode(phone.getMsg());
-  if (sendcode_status.msg !== '验证码发送成功') {
-    sender.reply(`发送验证码失败：${sendcode_status.msg}`);
-    return
-  } else {
-    sender.reply(`${sendcode_status.msg}`);
-  }
-
-  // 输入验证码
-  while (true) {
-    sender.reply('请输入验证码，q退出');
-    let code = await sender.waitInput(async (s)=> {
-      
-      let msg = s.getMsg();
-      if (msg === 'q') {
-        return 'q';                   //等价
-        // 判断是不是6个数字
-      } else if (!(/\d{6}$/.test(msg))) {
-        sender.reply('请输入正确验证码');
-        return 'again';
-      }
-    }, 120);
-    if (code === null) return sender.reply('超时自动退出');
-    if (code.getMsg() === 'q') return sender.reply('已退出');
-
-    await sender.reply(`正在验证...`);
-    // 判断验证码是否正确
-    const code_status = await login.verifycode(code.getMsg());
-    if (code_status.msg === '登录成功') {
-      await sender.reply('登录成功');
-      await sysMethod.sleep(1);
-      await sender.reply(`账号：${phone.getMsg()}\n密码：${code_status.password}\n备注：${code_status.remarks}`);
-      await bind_pin(sender, code_status.pt_pin);      // 绑定pin到数据库
-      break;
-    } else {
-      await sender.reply(`验证码失败：${code_status.msg}`);
-      return;
-    }
-  }
-
-  // 提交密码
-  await sysMethod.sleep(1);
-  await sender.reply('请输入登录密码用于密码自动登录，c跳过，q退出');
-  let password = await sender.waitInput(async (s)=> {
-    
-    let msg = s.getMsg();
-    if (msg === 'q') {
-      return 'q';                   //等价
-      // 判断是不是11位手机号
-    }
-    if ( msg === 'c') {
-      return 'c';
-    }
-  }, 120);
-  if (password === null) return sender.reply('超时自动退出');
-  if (password.getMsg() === 'q') return sender.reply('已退出');
-  let passwordMsg = password.getMsg();
-  if (password.getMsg() === 'c') {
-    passwordMsg = '';
-  }
-
-  // 备注
-  await sender.reply('请输入账号备注，c跳过，q退出');
-  let remarks = await sender.waitInput(async (s)=> {
-    
-    let msg = s.getMsg();
-    if (msg === 'q') {
-      return 'q';
-    }
-    if ( msg === 'c') {
-      return 'c';
-    }
-  }, 120);
-  if (remarks === null) return sender.reply('超时自动退出');
-  if (remarks.getMsg() === 'q') return sender.reply('已退出');
-  let remarksMsg = remarks.getMsg();
-  if (remarks.getMsg() === 'c') {
-    remarksMsg = '';
-  }
-
-  // 如果密码或者备注不是空的就进行提交
-  if (password !== '' || remarks !== '') {
-    const sumbit_status = await login.submit_user_info(passwordMsg, remarksMsg);
-    if (sumbit_status.msg === '提交用户信息成功') {
-      await  sender.reply('提交成功');
-    } else {
-      await sender.reply(`提交失败：${sumbit_status.msg}`);
-      return
-    };
-  };
-
+    // 获取订阅信息，包括订阅类型type，订阅备注remarks，订阅链接subUrl
+    const subUrlArray = await getSubUrlArray(token);
   
-  // 扫码提交uid
-  const uid_qrcode = await login.wxpusher_qrcode();
-  await sender.reply('扫码关注WxPusher，接受推送消息(可忽略)')
-  if (uid_qrcode.msg === '处理成功') {
-    await sender.reply({
-      type: 'image', // video
-      msg: '',
-      path: uid_qrcode.data.shortUrl,
-    });
-    return;
+    // 获取插件信息，包括插件文件名filename，安装状态isInstall，文件路径fileDir，插件id
+    const subUrlData = await getSubUrlData(token, subUrlArray);
+  
+    // 筛选已安装的插件列表，并将remarks与subUrl添加到插件对象中返回
+    const installedPlugins = filterInstalledPlugins(subUrlData);
+  
+    // 名单模式列表处理
+    const pluginslist = selectplugins(installedPlugins);
+  
+    // 安装插件
+    await installPlugins(token, pluginslist, s);
+  
+    await s.reply('更新完成');
+  } catch (error) {
+    logMessage('error', `插件更新失败: ${error}`);
+    s.reply(`插件更新失败：${error}`);
+  }
+
+  // 设置定时
+  const crontime = ConfigDB.userConfig.cron;
+  await cron_task(crontime);
+
+  // 重启
+  if (ConfigDB.userConfig.reboot == true) {
+    // 等5秒重启
+    await sysMethod.sleep(5);
+    sysMethod.inline('重启');
   }
   
-}
-
-
-
+  return 'next';
+};

@@ -3,12 +3,12 @@
  * @name Dsmggm_监测赞赏码信息
  * @team Dsmggm
  * @version 1.0.8
- * @description 监控赞赏码的插件，需要安装xml2js模块，需要登录微信才可使用，测试仅支持wechatFerry，借鉴于南下风来，感谢“南下风来”提供的匹配方式。用了都说妙~
+ * @description 监控赞赏码的插件，需要安装xml2js模块，需要登录微信才可使用，测试仅支持gewechat，借鉴于南下风来，感谢“南下风来”提供的匹配方式。用了都说妙~
  * @rule https:\/\/[A-Za-z0-9\-\._~:\/\?#\[\]@!$&'\*\+,%;\=]*
  * @parallel true 
  * parallel并行-匹配规则与spy相同的时候可以打开
  * @admin false
- * @public true
+ * @public false
  * @priority 99999
  * // 是否服务模块，true不会作为插件加载，会在系统启动时执行该插件内容
  * @service false
@@ -167,6 +167,7 @@ module.exports = async (s) => {
 
       // console.log(ConfigDB.userConfig.option)
       // 通知管理员
+      
       const rooms = ConfigDB.userConfig.option.rooms;
       for (const room of rooms) {
         const uid = room.uid;
