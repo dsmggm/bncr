@@ -44,28 +44,6 @@
     "id": "/f6DIUS9DYc36fbV2BNYKBcMLmc=",
     "isChatPlugin": true
   },
-  "zIBK788H4TY/AwiUwdG34Xx2Y6k=": {
-    "type": "github",
-    "name": "Dsmggm_jd绑定",
-    "author": "Dsmggm",
-    "team": "Dsmggm",
-    "version": "1.0.0",
-    "description": "京东账号绑定与解绑插件",
-    "classification": [
-      "工具"
-    ],
-    "filename": "Dsmggm_jd绑定.js",
-    "fileDir": "/plugins/Dsmggm/Dsmggm_jd绑定.js",
-    "systemVersionRange": "",
-    "isCron": false,
-    "isAdapter": false,
-    "isMod": false,
-    "isService": false,
-    "isAuthentication": false,
-    "isEncPlugin": false,
-    "id": "zIBK788H4TY/AwiUwdG34Xx2Y6k=",
-    "isChatPlugin": true
-  },
   "B7JL6g6tMyOvRFrfffFO1gMSiIQ=": {
     "type": "github",
     "name": "Dsmggm_交互式菜单",
