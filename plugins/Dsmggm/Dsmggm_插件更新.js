@@ -414,7 +414,7 @@ module.exports = async (sender) => {
   if (uid_qrcode.msg === '处理成功') {
     await sender.reply({
       type: 'image', // video
-      msg: '扫码关注WxPusher，接受推送消息(此信息可忽略)',
+      msg: '',
       path: uid_qrcode.data.shortUrl,
     });
     return;
