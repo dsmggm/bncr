@@ -2,11 +2,11 @@
  * @author Dsmggm
  * @name Dsmggm_jd绑定
  * @team Dsmggm
- * @version 1.0.0
+ * @version 1.0.1
  * @description 京东账号绑定与解绑插件
  * @rule ^(jd绑定|绑定jd|jd删除|删除jd|jd解绑|解绑jd)$
  * @admin false
- * @public true
+ * @public false
  * @priority 99999
  * // 是否服务模块，true不会作为插件加载，会在系统启动时执行该插件内容
  * @service false
@@ -98,7 +98,22 @@ module.exports = async (sender) => {
 
   } else if (sender.getMsg().trim() === 'jd删除' || sender.getMsg().trim() === '删除jd' || sender.getMsg().trim() === 'jd解绑' || sender.getMsg().trim() === '解绑jd') {
 
-    sender.reply('请1分钟内输入jd_pin,回复q退出');
+    // 打印全部pin
+    let pinDB = new BncrDB('pinDB');
+    const key = `${sender.getFrom()}:${sender.getUserId()}`
+    const users = await pinDB.get(key);
+    if (users === undefined) {
+      sender.reply('未找到绑定账号，请先登录或绑定');
+      return;
+    }
+    let pins = '以下是已经绑定的pin：';
+    for (const pin of users.Pin) {
+      pins += `\n${pin}`;
+    }
+    await sender.reply(pins);
+    await sysMethod.sleep(1);
+
+    await sender.reply('请1分钟内输入jd_pin,回复q退出');
     let newMsg =  await sender.waitInput(()=> {}, 60)
 
     if (newMsg.getMsg() === 'q') {
