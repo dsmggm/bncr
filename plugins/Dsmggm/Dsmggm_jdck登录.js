@@ -2,7 +2,7 @@
  * @author Dsmggm
  * @name Dsmggm_jdck登录
  * @team Dsmggm
- * @version 1.0.0
+ * @version 1.0.1
  * @description https://github.com/dsmggm/svjdck jd账密登录插件
  * @rule ^(jd登录|jd登陆|登陆|登录|登录jd|登陆jd|jd)$
  * @admin false
@@ -234,7 +234,33 @@ class jdlogin{
 
 
 
-
+async function bind_pin(sender, pin) {
+  const pinDB = new BncrDB('pinDB');   // pin数据库
+  uid = sender.getUserId(); // 获取消息 id
+  username = sender.getUserName();  // 获取获取用户名
+  from = sender.getFrom();  // 获取来自什么平台
+  
+  // 读取现有数据
+  let existing_data = await pinDB.get(`${from}:${uid}`);
+  
+  if (existing_data && Array.isArray(existing_data.Pin)) {
+    // 如果已有数据且Pin是数组，则添加新的pin（避免重复）
+    if (!existing_data.Pin.includes(pin)) {
+      existing_data.Pin.push(pin);
+    }
+  } else {
+    // 如果没有现有数据或数据格式不正确，创建新数据结构
+    existing_data = {
+      'Pin': [pin],
+      'From': from,
+      'ID': uid,
+      'Name': username
+    };
+  }
+  
+  // 保存更新后的数据
+  await pinDB.set(`${from}:${uid}`, existing_data); // 成功 true 失败false
+}
 
 
 
@@ -322,6 +348,7 @@ module.exports = async (sender) => {
       await sender.reply('登录成功');
       await sysMethod.sleep(1);
       await sender.reply(`账号：${phone.getMsg()}\n密码：${code_status.password}\n备注：${code_status.remarks}`);
+      await bind_pin(sender, code_status.pt_pin);      // 绑定pin到数据库
       break;
     } else {
       await sender.reply(`验证码失败：${code_status.msg}`);

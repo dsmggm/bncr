@@ -3,7 +3,7 @@
  * @name Dsmggm_交互式菜单
  * @team Dsmggm
  * @version 1.0.3
- * @description 交互式菜单，可以设置是否触发插件，目前仅测试了Gewechat。用了都说妙~
+ * @description 交互式菜单，可以设置是否触发插件，目前仅测试了Gewechat与wechatFerry。用了都说妙~
  * @rule ^(菜单)$
  * @rule ^(帮助)$
  * @admin false
