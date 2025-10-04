@@ -2,7 +2,7 @@
  * @author Dsmggm
  * @name Dsmggm_通用变量提交
  * @team Dsmggm
- * @version 1.0.0
+ * @version 1.0.1
  * @description 提交变量到指定容器
  * @rule ^(提交ck)$
  * @admin true
@@ -78,7 +78,14 @@ module.exports = async (sender) => {
     logger.info('插件未启用~');
     return 'next';  // 继续向下匹配插件
   }
-
+  
+  try {
+    const {ql} = require('./Dsmggm_青龙对接.js')
+  } catch (error) {
+    logger.error('未找到 Dsmggm_青龙对接.js');
+    return 'next';  // 继续向下匹配插件
+  }
+  
   // 变量名
   sender.reply(`请输入变量名，q退出`);
   let name = await sender.waitInput(async (s)=> {
@@ -121,7 +128,6 @@ module.exports = async (sender) => {
   if (remarks.getMsg() === 'q') return sender.reply('已退出');
   
   // 初始化青龙实例
-  const {ql} = require('./Dsmggm_青龙对接.js')
   const qinglong = await ql.init(ConfigDB.userConfig.settings.container)
   // 提交变量
   await qinglong.add_env(vlaue.getMsg(), name.getMsg(), remarks.getMsg() + '@@' + sender.getUserId());
