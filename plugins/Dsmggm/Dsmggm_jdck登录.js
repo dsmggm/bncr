@@ -2,7 +2,7 @@
  * @author Dsmggm
  * @name Dsmggm_jdck登录
  * @team Dsmggm
- * @version 1.0.1
+ * @version 1.0.2
  * @description https://github.com/dsmggm/svjdck jd账密登录插件
  * @rule ^(jd登录|jd登陆|登陆|登录|登录jd|登陆jd|jd)$
  * @admin false
@@ -297,7 +297,7 @@ module.exports = async (sender) => {
   }
 
   // 请输入登录账号
-  await sender.reply('请输入jd手机号，q退出');
+  await sender.reply('请输入jd手机号\n回复q退出');
   let phone = await sender.waitInput(async (s)=> {
     // sender.reply('请输入登录账号，q退出');
     
@@ -326,7 +326,7 @@ module.exports = async (sender) => {
 
   // 输入验证码
   while (true) {
-    sender.reply('请输入验证码，q退出');
+    sender.reply('请输入验证码\n回复q退出');
     let code = await sender.waitInput(async (s)=> {
       
       let msg = s.getMsg();
@@ -358,7 +358,7 @@ module.exports = async (sender) => {
 
   // 提交密码
   await sysMethod.sleep(1);
-  await sender.reply('请输入登录密码用于密码自动登录，c跳过，q退出');
+  await sender.reply('请输入登录密码用于密码自动登录\n回复c跳过此步骤\n回复q退出');
   let password = await sender.waitInput(async (s)=> {
     
     let msg = s.getMsg();
@@ -378,7 +378,7 @@ module.exports = async (sender) => {
   }
 
   // 备注
-  await sender.reply('请输入账号备注，c跳过，q退出');
+  await sender.reply('请输入账号备注\n回复c跳过此步骤\n回复q退出');
   let remarks = await sender.waitInput(async (s)=> {
     
     let msg = s.getMsg();
