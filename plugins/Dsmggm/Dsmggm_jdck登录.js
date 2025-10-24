@@ -6,7 +6,7 @@
  * @description https://github.com/dsmggm/svjdck jd账密登录插件
  * @rule ^(jd登录|jd登陆|登陆|登录|登录jd|登陆jd|jd)$
  * @admin false
- * @public false
+ * @public true
  * @priority 99999
  * // 是否服务模块，true不会作为插件加载，会在系统启动时执行该插件内容
  * @service false
