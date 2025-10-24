@@ -6,7 +6,7 @@
  * @description 请求赞赏，记录用户ID与赞赏内容到无界数据库，便于其它插件读取赞赏数据。用了都说妙~
  * @rule ^(赞赏|赞赏码|打款)$
  * @admin false
- * @public false
+ * @public true
  * @priority 99999
  * // 是否服务模块，true不会作为插件加载，会在系统启动时执行该插件内容
  * @service false

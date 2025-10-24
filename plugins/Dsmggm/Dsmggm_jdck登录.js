@@ -6,7 +6,7 @@
  * @description https://github.com/dsmggm/svjdck jd账密登录插件
  * @rule ^(jd登录|jd登陆|登陆|登录|登录jd|登陆jd|jd)$
  * @admin false
- * @public true
+ * @public false
  * @priority 99999
  * // 是否服务模块，true不会作为插件加载，会在系统启动时执行该插件内容
  * @service false
@@ -345,11 +345,15 @@ module.exports = async (sender) => {
     // 判断验证码是否正确
     const code_status = await login.verifycode(code.getMsg());
     if (code_status.msg === '登录成功') {
-      await sender.reply('登录成功，ck已提交');
+      await sender.reply('登录成功');
       await sysMethod.sleep(1);
       await sender.reply(`账号：${phone.getMsg()}\n密码：${code_status.password}\n备注：${code_status.remarks}`);
       await bind_pin(sender, code_status.pt_pin);      // 绑定pin到数据库
       break;
+    } else if (code_status.msg === '验证码错误，请重新输入') {
+      await sender.reply(`验证码错误，请重新输入`);
+      await sysMethod.sleep(1);
+      continue;
     } else {
       await sender.reply(`验证码失败：${code_status.msg}`);
       return;

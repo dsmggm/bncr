@@ -6,7 +6,7 @@
  * @description 提交变量到指定容器
  * @rule ^(提交ck)$
  * @admin true
- * @public false
+ * @public true
  * @priority 3
  * @service false
  * @classification ["工具"]
