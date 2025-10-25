@@ -2,7 +2,7 @@
  * @author Dsmggm
  * @name Dsmggm_插件更新
  * @team Dsmggm
- * @version 1.0.2
+ * @version 1.0.3
  * @description 插件更新插件，支持黑名单，白名单，全部更新模式。
  * @rule ^(插件更新)$
  * @rule ^(更新插件)$

@@ -2,7 +2,7 @@
  * @author Dsmggm
  * @name Dsmggm_jdck状态通知
  * @team Dsmggm
- * @version 1.0.4
+ * @version 1.0.5
  * @description https://github.com/dsmggm/svjdck jd账密通知插件
  * @rule ^(jdck状态通知)$
  * @admin true
@@ -84,7 +84,7 @@ async function get_ck() {
     );
     if (response.status === 200) {
       const token = response.headers.token;
-      logger.info(`响应头: ${JSON.stringify(response.headers['set-cookie'][0])}`);
+      // logger.info(`响应头: ${JSON.stringify(response.headers['set-cookie'][0])}`);
       const cookie = response.headers['set-cookie'][0];
       const tokenMatch = cookie.match(/token=([^;]+)/);
       return tokenMatch[1]
@@ -218,6 +218,7 @@ module.exports = async (sender) => {
     }
     
   }
+  logger.info('jdck状态通知结束')
 }
 
 
