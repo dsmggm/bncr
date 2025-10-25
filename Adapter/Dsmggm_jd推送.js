@@ -19,7 +19,7 @@
 const describe_text =`
 接收京东日志,然后进行推送<br>
 {<br>
-pt_pin': '日志内容'<br>
+'pt_pin': '日志内容'<br>
 }<br>
 `;
 

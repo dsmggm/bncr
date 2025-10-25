@@ -15,11 +15,10 @@
  * @cron 0 12 * * *
  */
 
-const { get } = require('http');
 
 // 插件说明内容
 const describe_text =`
-说明定时通知用户状态
+定时通知用户状态
 `;
 // 日志函数
 const plugins_name = 'Dsmggm_jdck通知';
@@ -66,7 +65,6 @@ const ConfigDB = new BncrPluginConfig(jsonSchema);
 
 
 const axios = require('axios');
-const { log } = require('console');
 async function get_ck() { 
   // 发送验证码
   try {
