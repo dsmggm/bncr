@@ -2,7 +2,7 @@
  * @author Dsmggm
  * @name Dsmggm_jdck状态通知
  * @team Dsmggm
- * @version 1.0.3
+ * @version 1.0.4
  * @description https://github.com/dsmggm/svjdck jd账密通知插件
  * @rule ^(jdck状态通知)$
  * @admin true
