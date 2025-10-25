@@ -44,6 +44,28 @@
     "id": "ABgSyIg57Vqc3SCuoG3Ogn8UqJ4=",
     "isChatPlugin": true
   },
+  "Hkv0RDP/UX5EQm7Q/bFAOui/L+Q=": {
+    "type": "github",
+    "name": "Dsmggm_jdck状态通知",
+    "author": "Dsmggm",
+    "team": "Dsmggm",
+    "version": "1.0.3",
+    "description": "https://github.com/dsmggm/svjdck jd账密通知插件",
+    "classification": [
+      "工具"
+    ],
+    "filename": "Dsmggm_jdck状态通知.js",
+    "fileDir": "/plugins/Dsmggm/Dsmggm_jdck状态通知.js",
+    "systemVersionRange": "",
+    "isCron": false,
+    "isAdapter": false,
+    "isMod": false,
+    "isService": false,
+    "isAuthentication": false,
+    "isEncPlugin": false,
+    "id": "Hkv0RDP/UX5EQm7Q/bFAOui/L+Q=",
+    "isChatPlugin": true
+  },
   "/f6DIUS9DYc36fbV2BNYKBcMLmc=": {
     "type": "github",
     "name": "Dsmggm_jdck登录",
