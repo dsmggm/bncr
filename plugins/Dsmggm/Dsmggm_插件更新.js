@@ -16,7 +16,6 @@
  * @cron 1 1 1 1 * *
  */
 
-const { log } = require('console');
 
 // 插件说明内容
 const describe_text = `
