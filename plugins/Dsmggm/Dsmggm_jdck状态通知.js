@@ -21,7 +21,7 @@ const describe_text =`
 定时通知用户状态
 `;
 // 日志函数
-const plugins_name = 'Dsmggm_jdck通知';
+const plugins_name = 'Dsmggm_jdck状态通知';
 const logger = {
   // 使用方法： logger.info('日志文本');
   // 其它级别自行写
