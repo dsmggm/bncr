@@ -49,7 +49,7 @@
     "name": "Dsmggm_jdck状态通知",
     "author": "Dsmggm",
     "team": "Dsmggm",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "https://github.com/dsmggm/svjdck jd账密通知插件",
     "classification": [
       "工具"
@@ -203,7 +203,7 @@
     "name": "Dsmggm_插件更新",
     "author": "Dsmggm",
     "team": "Dsmggm",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "插件更新插件，支持黑名单，白名单，全部更新模式。",
     "classification": [
       "工具"
