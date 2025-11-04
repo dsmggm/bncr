@@ -176,6 +176,28 @@
     "id": "OPr+rIyd2aa7UJA4mtWer0y4oDs=",
     "isChatPlugin": true
   },
+  "OU3/HTrFjvsJm1+vyEQXOw6Jt8U=": {
+    "type": "github",
+    "name": "Dsmggm_今天吃什么",
+    "author": "Dsmggm",
+    "team": "Dsmggm",
+    "version": "1.0.3",
+    "description": "如果你不知道吃什么，那你就可以问问机器人",
+    "classification": [
+      "工具"
+    ],
+    "filename": "Dsmggm_今天吃什么.js",
+    "fileDir": "/plugins/Dsmggm/Dsmggm_今天吃什么.js",
+    "systemVersionRange": "",
+    "isCron": false,
+    "isAdapter": false,
+    "isMod": false,
+    "isService": false,
+    "isAuthentication": false,
+    "isEncPlugin": false,
+    "id": "OU3/HTrFjvsJm1+vyEQXOw6Jt8U=",
+    "isChatPlugin": true
+  },
   "1kCH5Pom9bPteL0g22BMViqqF3Y=": {
     "type": "github",
     "name": "Dsmggm_唤醒开机",
@@ -284,6 +306,28 @@
     "isAuthentication": false,
     "isEncPlugin": false,
     "id": "+N1c5WbqoUZoGbNok+AiS056/24=",
+    "isChatPlugin": true
+  },
+  "ba/3U/6K57AG8FhjhiKIOjW/nVI=": {
+    "type": "github",
+    "name": "Dsmggm_随机生成uuid",
+    "author": "Dsmggm",
+    "team": "Dsmggm",
+    "version": "1.0.0",
+    "description": "随机生成并返回UUID给用户",
+    "classification": [
+      "工具"
+    ],
+    "filename": "Dsmggm_随机生成uuid.js",
+    "fileDir": "/plugins/Dsmggm/Dsmggm_随机生成uuid.js",
+    "systemVersionRange": "",
+    "isCron": false,
+    "isAdapter": false,
+    "isMod": false,
+    "isService": false,
+    "isAuthentication": false,
+    "isEncPlugin": false,
+    "id": "ba/3U/6K57AG8FhjhiKIOjW/nVI=",
     "isChatPlugin": true
   },
   "XGiQT+4tugh6kSvCvw0hoeTM49w=": {
