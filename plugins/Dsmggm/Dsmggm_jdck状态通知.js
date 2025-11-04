@@ -12,7 +12,7 @@
  * @service false
  * @classification ["工具"]
  * // 定时任务cron规则，默认1天，如需修改，请自行修改脚本
- * @cron 0 12 * * *
+ * @cron 0 12,20 * * *
  */
 
 

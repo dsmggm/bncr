@@ -345,7 +345,7 @@ module.exports = async (sender) => {
     // 判断验证码是否正确
     const code_status = await login.verifycode(code.getMsg());
     if (code_status.msg === '登录成功') {
-      await sender.reply('登录成功');
+      await sender.reply('登录成功，ck已提交');
       await sysMethod.sleep(1);
       await sender.reply(`账号：${phone.getMsg()}\n密码：${code_status.password}\n备注：${code_status.remarks}`);
       await bind_pin(sender, code_status.pt_pin);      // 绑定pin到数据库
