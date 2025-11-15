@@ -5,7 +5,7 @@
  * @version 1.0.0
  * @description 随机生成并返回UUID给用户
  * @rule ^(uuid)$
- * @admin true
+ * @admin false
  * @public true
  * @priority 99999
  * // 是否服务模块，true不会作为插件加载，会在系统启动时执行该插件内容

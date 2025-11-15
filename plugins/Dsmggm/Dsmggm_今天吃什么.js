@@ -6,7 +6,7 @@
  * @description 如果你不知道吃什么，那你就可以问问机器人
  * @rule ^(今天吃什么|吃什么)$
  * @rule ^(今天做什么|做什么)$
- * @admin true
+ * @admin false
  * @public true
  * @priority 99999
  * // 是否服务模块，true不会作为插件加载，会在系统启动时执行该插件内容
