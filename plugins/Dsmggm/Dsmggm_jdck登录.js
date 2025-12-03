@@ -2,7 +2,7 @@
  * @author Dsmggm
  * @name Dsmggm_jdck登录
  * @team Dsmggm
- * @version 1.0.4
+ * @version 1.0.5
  * @description https://github.com/dsmggm/svjdck jd账密登录插件
  * @rule ^(jd登录|jd登陆|登陆|登录|登录jd|登陆jd|jd)$
  * @admin false
@@ -15,7 +15,7 @@
 
 // 插件说明内容
 const describe_text =`
-设置svjdck对接
+jdck登录插件
 `;
 
 // 日志函数
@@ -320,10 +320,12 @@ module.exports = async (sender) => {
   if (sendcode_status.msg !== '验证码发送成功') {
     sender.reply(`发送验证码失败：${sendcode_status.msg}`);
     return
+  } else if (sendcode_status.msg === '验证码发送成功') {
+    // await sender.reply('验证码发送成功');
+  } else {
+    await sender.reply(`${sendcode_status.msg}`);
+    return;
   }
-  // } else {
-  //   sender.reply(`${sendcode_status.msg}`);
-  // }
 
   // 输入验证码
   while (true) {
