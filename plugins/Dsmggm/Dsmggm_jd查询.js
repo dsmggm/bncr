@@ -2,7 +2,7 @@
  * @author Dsmggm
  * @name Dsmggm_jd查询
  * @team Dsmggm
- * @version 1.0.1
+ * @version 1.0.2
  * @description 京东账号查询插件
  * @rule ^(jdcx|京东查询|jd查询|查询)$
  * @admin false
@@ -426,7 +426,7 @@ module.exports = async (sender) => {
       // logger.info(`✅查询结果${JSON.stringify(jd_cookie)}`);
       const remarks = jd_cookie[0].remarks
       const remark = remarks.split('@@')[0];
-      await sender.reply(`${user}\n${await cheack(jd_cookie[0].value)}`);
+      await sender.reply(`账号：${remark}\nPin:${user}\n${await cheack(jd_cookie[0].value)}`);
       await sysMethod.sleep(3);
     }
 
@@ -459,7 +459,7 @@ module.exports = async (sender) => {
     }
     const remarks = jd_cookie[0].remarks
     const remark = remarks.split('@@')[0];
-    await sender.reply(`${remark}\n${selectedPin} 查询结果：\n${await cheack(jd_cookie[0].value)}`);
+    await sender.reply(`账号：${remark}\nPin:${selectedPin}\n${await cheack(jd_cookie[0].value)}`);
 
   }
 
