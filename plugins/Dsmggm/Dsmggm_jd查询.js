@@ -2,7 +2,7 @@
  * @author Dsmggm
  * @name Dsmggm_jd查询
  * @team Dsmggm
- * @version 1.0.0
+ * @version 1.0.1
  * @description 京东账号查询插件
  * @rule ^(jdcx|京东查询|jd查询|查询)$
  * @admin false
@@ -15,8 +15,8 @@
 
 // 插件说明内容
 const describe_text =`
-1、暂无说明:<br>
-设置svjdck对接
+京东查询，只支持查询京东账号的京豆和红包数据。<br>
+使用前请先安装并配置 Dsmggm_青龙对接插件。
 `;
 // 日志函数
 const plugins_name = 'Dsmggm_jd查询';
@@ -413,7 +413,7 @@ module.exports = async (sender) => {
         return item.value.includes(`pt_pin=${user}`);
       });
       if (jd_cookie.length === 0) {
-        await sender.reply(`${user}CK未找到`);
+        await sender.reply(`${user}CK未找到，请先登录提交`);
         continue;
       }
       if (jd_cookie[0].status === 1) {
@@ -424,6 +424,8 @@ module.exports = async (sender) => {
       logger.info(`正在查询${user}`);
       // sender.reply(`正在查询${user}`);
       // logger.info(`✅查询结果${JSON.stringify(jd_cookie)}`);
+      const remarks = jd_cookie[0].remarks
+      const remark = remarks.split('@@')[0];
       await sender.reply(`${user}\n${await cheack(jd_cookie[0].value)}`);
       await sysMethod.sleep(3);
     }
@@ -455,8 +457,9 @@ module.exports = async (sender) => {
     if (jd_cookie[0].status === 1) {
       await sender.reply(`${selectedPin}  ❌CK过期禁用了`);
     }
-    
-    await sender.reply(`${selectedPin} 查询结果：\n${await cheack(jd_cookie[0].value)}`);
+    const remarks = jd_cookie[0].remarks
+    const remark = remarks.split('@@')[0];
+    await sender.reply(`${remark}\n${selectedPin} 查询结果：\n${await cheack(jd_cookie[0].value)}`);
 
   }
 
