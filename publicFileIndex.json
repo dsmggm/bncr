@@ -71,7 +71,7 @@
     "name": "Dsmggm_jdck登录",
     "author": "Dsmggm",
     "team": "Dsmggm",
-    "version": "1.0.3",
+    "version": "1.0.5",
     "description": "https://github.com/dsmggm/svjdck jd账密登录插件",
     "classification": [
       "工具"
@@ -93,7 +93,7 @@
     "name": "Dsmggm_jd查询",
     "author": "Dsmggm",
     "team": "Dsmggm",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "京东账号查询插件",
     "classification": [
       "工具"
