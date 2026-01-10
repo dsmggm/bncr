@@ -2,7 +2,7 @@
  * @author Dsmggm
  * @name Dsmggm_jdck登录
  * @team Dsmggm
- * @version 1.0.5
+ * @version 1.0.6
  * @description https://github.com/dsmggm/svjdck jd账密登录插件
  * @rule ^(jd登录|jd登陆|登陆|登录|登录jd|登陆jd|jd)$
  * @admin false
@@ -302,7 +302,7 @@ module.exports = async (sender) => {
     // sender.reply('请输入登录账号，q退出');
     
     let msg = s.getMsg();
-    if (msg === 'q') {
+    if (msg === 'q' || msg === 'Q') {
       return 'q';                   //等价
       // 判断是不是11位手机号
     } else if (!(/^1\d{10}$/.test(msg))) {
@@ -333,7 +333,7 @@ module.exports = async (sender) => {
     let code = await sender.waitInput(async (s)=> {
       
       let msg = s.getMsg();
-      if (msg === 'q') {
+      if (msg === 'q' || msg === 'Q') {
         return 'q';                   //等价
         // 判断是不是6个数字
       } else if (!(/\d{6}$/.test(msg))) {
@@ -348,9 +348,7 @@ module.exports = async (sender) => {
     // 判断验证码是否正确
     const code_status = await login.verifycode(code.getMsg());
     if (code_status.msg === '登录成功') {
-      await sender.reply('登录成功，ck已提交');
-      await sysMethod.sleep(1);
-      await sender.reply(`账号：${phone.getMsg()}\n密码：${code_status.password}\n备注：${code_status.remarks}`);
+      await sender.reply('登录成功，ck已提交\n\n账号：${phone.getMsg()}\n密码：${code_status.password}\n备注：${code_status.remarks}\n\n可输入q跳过账号密码的提交');
       await bind_pin(sender, code_status.pt_pin);      // 绑定pin到数据库
       break;
     } else if (code_status.msg === '验证码错误，请重新输入') {
@@ -365,15 +363,15 @@ module.exports = async (sender) => {
 
   // 提交密码
   await sysMethod.sleep(1);
-  await sender.reply('请输入登录密码用于密码自动登录\n回复c跳过此步骤\n回复q退出');
+  await sender.reply('请输入jd登录密码\n\n注:密码用于自动登录\n\n回复c跳过此步骤\n回复q退出');
   let password = await sender.waitInput(async (s)=> {
     
     let msg = s.getMsg();
-    if (msg === 'q') {
+    if (msg === 'q' || msg === 'Q') {
       return 'q';                   //等价
       // 判断是不是11位手机号
     }
-    if ( msg === 'c') {
+    if ( msg === 'c' || msg === 'C') {
       return 'c';
     }
   }, 120);
@@ -389,10 +387,10 @@ module.exports = async (sender) => {
   let remarks = await sender.waitInput(async (s)=> {
     
     let msg = s.getMsg();
-    if (msg === 'q') {
+    if (msg === 'q' || msg === 'Q') {
       return 'q';
     }
-    if ( msg === 'c') {
+    if ( msg === 'c' || msg === 'C') {
       return 'c';
     }
   }, 120);
