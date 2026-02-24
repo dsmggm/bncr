@@ -27,7 +27,7 @@
     "name": "Dsmggm_HomeAssistant",
     "author": "Dsmggm",
     "team": "Dsmggm",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "智能家居HomeAssistant对话插件",
     "classification": [
       "工具"
@@ -196,28 +196,6 @@
     "isAuthentication": false,
     "isEncPlugin": false,
     "id": "OU3/HTrFjvsJm1+vyEQXOw6Jt8U=",
-    "isChatPlugin": true
-  },
-  "1kCH5Pom9bPteL0g22BMViqqF3Y=": {
-    "type": "github",
-    "name": "Dsmggm_唤醒开机",
-    "author": "Dsmggm",
-    "team": "Dsmggm",
-    "version": "1.0.2",
-    "description": "唤醒电脑开机，需要提前设置网口与BIOS，具体请自行百度查询设置方法",
-    "classification": [
-      "工具"
-    ],
-    "filename": "Dsmggm_唤醒开机.js",
-    "fileDir": "/plugins/Dsmggm/Dsmggm_唤醒开机.js",
-    "systemVersionRange": "",
-    "isCron": false,
-    "isAdapter": false,
-    "isMod": false,
-    "isService": false,
-    "isAuthentication": false,
-    "isEncPlugin": false,
-    "id": "1kCH5Pom9bPteL0g22BMViqqF3Y=",
     "isChatPlugin": true
   },
   "uPBlExO5epsn6JF42McxeuJpQu0=": {
