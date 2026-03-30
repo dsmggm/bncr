@@ -1,6 +1,6 @@
 /**
  * This file is part of the App project.
- * @author Aming
+ * @author dsmgm
  * @name Dsmggm_qq
  * @team Dsmggm
  * @version 1.0.1
