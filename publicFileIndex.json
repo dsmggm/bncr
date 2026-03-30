@@ -22,6 +22,28 @@
     "id": "dusFWOHWLQYJVDCfj/EhBKwWUOU=",
     "isChatPlugin": false
   },
+  "eC5KeeqVsj4/Cr5R+qGFJOTFvNE=": {
+    "type": "github",
+    "name": "Dsmggm_qq",
+    "author": "dsmgm",
+    "team": "Dsmggm",
+    "version": "1.0.1",
+    "description": "外置qq机器人适配器，官方增加伪装消息功能",
+    "classification": [
+      "官方适配器"
+    ],
+    "filename": "Dsmggm_qq.js",
+    "fileDir": "/Adapter/Dsmggm_qq.js",
+    "systemVersionRange": "",
+    "isCron": false,
+    "isAdapter": true,
+    "isMod": false,
+    "isService": false,
+    "isAuthentication": false,
+    "isEncPlugin": false,
+    "id": "eC5KeeqVsj4/Cr5R+qGFJOTFvNE=",
+    "isChatPlugin": false
+  },
   "ABgSyIg57Vqc3SCuoG3Ogn8UqJ4=": {
     "type": "github",
     "name": "Dsmggm_HomeAssistant",
