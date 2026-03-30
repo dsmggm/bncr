@@ -30,17 +30,18 @@ const logger = {
     // 格式化为 YYYY-MM-DDTHH:mm:ss.sss 格式
     return date.toISOString().slice(0, -1);
   },
-  
+  // DEBUG级日志
+  debug(message = '') {
+    console.log(`\x1b[34m[${this.getFormattedTime()}] [DEBUG] ${plugins_name} - ${message}\x1b[0m`);
+  },
   // INFO级日志
   info(message = '') {
     console.log(`\x1b[32m[${this.getFormattedTime()}] [INFO] ${plugins_name} - ${message}\x1b[0m`);
   },
-  
   // WARE级日志
   ware(message = '') {
     console.log(`\x1b[33m[${this.getFormattedTime()}] [WARE] ${plugins_name} - ${message}\x1b[0m`);
   },
-
   // ERROR级日志
   error(message = '') {
     console.error(`\x1b[31m[${this.getFormattedTime()}] [ERROR] ${plugins_name} - ${message}\x1b[0m`);

@@ -108,6 +108,8 @@ async function TriggerPlugin(msg, s) {
     groupId: groupid || '0',
     friendId: friendid|| '0',
   }
+  console.log('触发插件，传入参数：', msgInfo);
+  console.log('from:', from);
   sysMethod.Adapters(msgInfo, from, 'inlinemask', msgInfo); 
 }
 
