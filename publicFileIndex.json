@@ -1,5 +1,27 @@
 {
   "annotation": "该文件由系统自动生成. 用于插件市场索引,请勿编辑该文件中的任何内容",
+  "V1tPxXWP8ondQ6jn2c+zOfWOymE=": {
+    "type": "github",
+    "name": "Dsmggm_WeChatWorkBot",
+    "author": "Dsmggm",
+    "team": "Dsmggm",
+    "version": "1.0.0",
+    "description": "企业微信机器人",
+    "classification": [
+      "工具"
+    ],
+    "filename": "Dsmggm_WeChatWorkBot.js",
+    "fileDir": "/Adapter/Dsmggm_WeChatWorkBot.js",
+    "systemVersionRange": "",
+    "isCron": false,
+    "isAdapter": true,
+    "isMod": false,
+    "isService": false,
+    "isAuthentication": false,
+    "isEncPlugin": false,
+    "id": "V1tPxXWP8ondQ6jn2c+zOfWOymE=",
+    "isChatPlugin": false
+  },
   "dusFWOHWLQYJVDCfj/EhBKwWUOU=": {
     "type": "github",
     "name": "Dsmggm_jd推送",
@@ -218,6 +240,28 @@
     "isAuthentication": false,
     "isEncPlugin": false,
     "id": "OU3/HTrFjvsJm1+vyEQXOw6Jt8U=",
+    "isChatPlugin": true
+  },
+  "vsRRdeFsOZJiXbRCiaKYvaOO5zo=": {
+    "type": "github",
+    "name": "Dsmggm_微软离线电话激活",
+    "author": "Dsmggm",
+    "team": "Dsmggm",
+    "version": "1.0.0",
+    "description": "Dsmggm_微软离线电话激活插件，用于激活微软离线电话功能",
+    "classification": [
+      "工具"
+    ],
+    "filename": "Dsmggm_微软离线电话激活.js",
+    "fileDir": "/plugins/Dsmggm/Dsmggm_微软离线电话激活.js",
+    "systemVersionRange": "",
+    "isCron": false,
+    "isAdapter": false,
+    "isMod": false,
+    "isService": false,
+    "isAuthentication": false,
+    "isEncPlugin": false,
+    "id": "vsRRdeFsOZJiXbRCiaKYvaOO5zo=",
     "isChatPlugin": true
   },
   "uPBlExO5epsn6JF42McxeuJpQu0=": {
